@@ -1,0 +1,67 @@
+Coders: 
+    - 1 or more
+    - Represented by a Pthread
+    - Sit in circular shape (circular linked list ?)
+    - Have 2 hands
+    - 3 task possible in a LOOP 
+        (number_of_compiles_required times)
+        - Compile
+            - Need 2 dongles at the same time.
+                One per hand
+            - hold them time_to_compile ms
+            - When finish, put back dongles on
+                the table then start Debuging
+            - Need to do it every time_to_burnout ms maximum
+        - Debug
+            - Spend time_to_debug ms on this task. 
+            - then refactor
+        - refactor
+            - Spend time_to_refactor ms.
+            - Start trying to acquire dongle in order to 
+                compile immediatly after this.
+    - Need to compile regurlaly
+    - Coders dont have any info on others
+    - They can only know if a dongle is available
+        (mutex, lock, ...)
+
+
+Dongles: 
+    - Nb coders dongle available
+    - Are on the table 
+    - unavailable dongle_cooldown ms after being used
+
+
+Goal:
+    - Coders must code before time_to_burnout ms or
+        they burns
+    - Compile number_of_compiles_required times
+    - Simulation stop when coder burns out due to lack 
+        of compiling
+    - Every change of state must be printed on one line (mutex to 
+        protect the output)
+    - Display burn out within the next 10ms after the actual burnout 
+
+Observations/ Questions: 
+    - I can keep track of the most urgent coder in a Pqueue.
+        - Only for the edf scheduling
+
+
+Code structure:
+    - Dongle Struct
+        -> dongle_cooldown
+        -> id ?
+        -> Used or not (mutex)
+    
+    - Coder Struct
+        -> left_hand
+        -> right_hand
+        -> actual_task
+        -> last_compile_start
+        -> number
+
+    - Table
+
+    - Schedule (Pqueue / linked list)
+        -> arr[Coder]
+        - Pop left func
+        - insert coder at the right place func

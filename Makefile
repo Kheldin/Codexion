@@ -1,13 +1,13 @@
 NAME		:= codexion
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror -g3
+CFLAGS		:= -Wall -Wextra -Werror -pthread
 
 SRCDIR		:= .
 DEPDIR		:= .deps
 INCDIR		:= includes
 BUILDDIR	:= build
 
-SRCFILES	:= main.c
+SRCFILES	:= main.c init_coders.c
 
 OBJS		:= $(addprefix $(BUILDDIR)/,$(SRCFILES:.c=.o))
 HEADERS		:= $(INCDIR)/coders.h
@@ -32,7 +32,6 @@ vpath %.c $(SRCDIR)
 clean:
 	rm -rf $(DEPDIR)
 	rm -rf $(BUILDDIR)
-	rm -f *.txt
 
 fclean: clean
 	rm -f $(NAME)
