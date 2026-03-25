@@ -7,7 +7,7 @@ DEPDIR		:= .deps
 INCDIR		:= includes
 BUILDDIR	:= build
 
-SRCFILES	:= main.c init_coders.c
+SRCFILES	:= main.c init_coders.c utils/ft_calloc.c
 
 OBJS		:= $(addprefix $(BUILDDIR)/,$(SRCFILES:.c=.o))
 HEADERS		:= $(INCDIR)/coders.h
