@@ -7,7 +7,7 @@ DEPDIR		:= .deps
 INCDIR		:= includes
 BUILDDIR	:= build
 
-SRCFILES	:= main.c init_coders.c utils/ft_calloc.c
+SRCFILES	:= main.c init_coders.c utils/ft_calloc.c utils/print_instructions.c
 
 OBJS		:= $(addprefix $(BUILDDIR)/,$(SRCFILES:.c=.o))
 HEADERS		:= $(INCDIR)/coders.h
@@ -40,7 +40,7 @@ re: fclean all
 
 debug: all
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all -s ./$(NAME)
+	valgrind --leak-check=full --show-leak-kinds=all -s ./$(NAME) 1 2 3 4 5 6 7 str
 
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)

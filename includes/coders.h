@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/25 16:06:49 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/27 16:40:24 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,16 @@ typedef struct s_dongle {
 
 } t_dongle;
 
+typedef struct	s_config {
+	int	nb_coders;
+	int	time_to_burnout;
+	int	time_to_compile;
+	int	time_to_debug;
+	int	time_to_refactor;
+	int	nb_compile_required;
+	int	dongle_cooldown;
+} t_config;
+
 void	*ft_calloc(size_t nmemb, size_t size);
+
+int print_instructions();

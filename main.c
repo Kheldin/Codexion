@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/27 14:28:10 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/27 16:47:37 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	*init_coders(void *data)
 // }
 
 // Create nb_coders thread
-void	create_coders(int nb_coders)
+pthread_t	*create_coders(int nb_coders)
 {
 	pthread_t	*coders;
 	int			*id;
@@ -41,49 +41,39 @@ void	create_coders(int nb_coders)
 	coders = ft_calloc((nb_coders + 1), sizeof(pthread_t));
 	id = ft_calloc((nb_coders + 1), sizeof(int));
 	if (!coders || !id)
-		return ;
+		return (NULL);
 	while (i < nb_coders)
 	{
 		id[i] = i;
 		if (pthread_create(&coders[i], NULL, init_coders, &id[i]) != 0)
-			return ;
+			return (NULL);
 		i++;
 	}
 	nb_coders--;
 	while (nb_coders)
 		pthread_join(coders[nb_coders--], NULL);
 	pthread_join(coders[0], NULL);
-	free(coders);
 	free(id);
-	return ;
+	return (coders);
+}
+
+t_config	*init_config(char **av)
+{
+	(void)av;
+	return (NULL);
 }
 
 int	main(int ac, char **av)
 {
-	int	nb_coders;
-	int	i;
+	pthread_t	*coders;
+	t_config	*config;
 
-	(void)ac;
-	(void)av;
-	i = 0;
-	nb_coders = 8;
-	create_coders(0);
-	// if (!coders)
-	// 	return (0); // free everything (coders + inside)
-	// while (nb_coders)
-	// 	free(coders[--nb_coders]);
-	// if (ac != 9)
-	// {
-	// 	printf("Enter the args in the following order please.\n");
-	// 	printf("\t=> number_of_coders\n");
-	// 	printf("\t=> time_to_burnout\n");
-	// 	printf("\t=> time_to_compile\n");
-	// 	printf("\t=> time_to_debug\n");
-	// 	printf("\t=> time_to_refactor\n");
-	// 	printf("\t=> number_of_compiles_required\n");
-	// 	printf("\t=> dongle_cooldown\n");
-	// 	printf("\t=> scheduler\n");
-	// 	return (0);
-	// }
+	if (ac != 9)
+		return (print_instructions());
+	coders = create_coders(8);
+	if (!coders)
+		return (0);
+	config = init_config(av);
+	free(coders);
 	return (0);
 }
