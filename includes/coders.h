@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/27 18:32:03 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/27 18:41:47 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ typedef struct s_config
 	int			dongle_cooldown;
 }				t_config;
 
-typedef struct s_coders
+typedef struct s_coder
 {
 	t_config	config;
 	int			left;
 	int			right;
 	int			id;
-}				t_coders;
+}				t_coder;
 
 void			*ft_calloc(size_t nmemb, size_t size);
 

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/27 18:37:22 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/27 19:15:52 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ void	*coders_routine(void *data)
 pthread_t	*create_coders(t_config *config)
 {
 	pthread_t	*coders;
+	t_coder *coder;
 	int			*id;
 	int			i;
 
+	coder = NULL;
 	i = 0;
 	coders = ft_calloc((config->nb_coders + 1), sizeof(pthread_t));
 	id = ft_calloc((config->nb_coders + 1), sizeof(int));
@@ -36,6 +38,7 @@ pthread_t	*create_coders(t_config *config)
 		return (NULL);
 	while (i < config->nb_coders)
 	{
+		coder->config = *config;
 		id[i] = i;
 		if (pthread_create(&coders[i], NULL, coders_routine, config) != 0)
 			return (NULL);
