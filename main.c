@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/27 16:47:37 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/27 18:27:26 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,27 @@ void	*init_coders(void *data)
 // }
 
 // Create nb_coders thread
-pthread_t	*create_coders(int nb_coders)
+pthread_t	*create_coders(t_config *config)
 {
 	pthread_t	*coders;
 	int			*id;
 	int			i;
 
 	i = 0;
-	coders = ft_calloc((nb_coders + 1), sizeof(pthread_t));
-	id = ft_calloc((nb_coders + 1), sizeof(int));
+	coders = ft_calloc((config->nb_coders + 1), sizeof(pthread_t));
+	id = ft_calloc((config->nb_coders + 1), sizeof(int));
 	if (!coders || !id)
 		return (NULL);
-	while (i < nb_coders)
+	while (i < config->nb_coders)
 	{
 		id[i] = i;
 		if (pthread_create(&coders[i], NULL, init_coders, &id[i]) != 0)
 			return (NULL);
 		i++;
 	}
-	nb_coders--;
-	while (nb_coders)
-		pthread_join(coders[nb_coders--], NULL);
+	i = config->nb_coders;
+	while (i)
+		pthread_join(coders[i--], NULL);
 	pthread_join(coders[0], NULL);
 	free(id);
 	return (coders);
@@ -59,8 +59,19 @@ pthread_t	*create_coders(int nb_coders)
 
 t_config	*init_config(char **av)
 {
-	(void)av;
-	return (NULL);
+	static t_config config;
+
+	// config = ft_calloc(1, sizeof(t_config));
+	// if (!config)
+	// 	return (NULL);
+	config.nb_coders = atoi(av[1]);
+	config.time_to_burnout = atoi(av[2]);
+	config.time_to_compile = atoi(av[3]);
+	config.time_to_debug = atoi(av[4]);
+	config.time_to_refactor = atoi(av[5]);
+	config.nb_compile_required = atoi(av[6]);
+	config.dongle_cooldown = atoi(av[7]);
+	return (&config);
 }
 
 int	main(int ac, char **av)
@@ -70,10 +81,10 @@ int	main(int ac, char **av)
 
 	if (ac != 9)
 		return (print_instructions());
-	coders = create_coders(8);
+	config = init_config(av);
+	coders = create_coders(config);
 	if (!coders)
 		return (0);
-	config = init_config(av);
 	free(coders);
 	return (0);
 }

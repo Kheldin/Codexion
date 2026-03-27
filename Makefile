@@ -40,7 +40,7 @@ re: fclean all
 
 debug: all
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all -s ./$(NAME) 1 2 3 4 5 6 7 str
+	valgrind --leak-check=full --show-leak-kinds=all -s ./$(NAME) 8 2 3 4 5 6 7 str
 
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
