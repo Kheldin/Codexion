@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/27 18:27:26 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/27 18:37:22 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	*init_coders(void *data)
+void	*coders_routine(void *data)
 {
-	printf("I'm thread number: %d\n", *(int *)data);
+	t_config *casted_data = (t_config*)data;
+	printf("I'm thread number: %d\n", casted_data->nb_coders);
 	return (NULL);
 }
-
-// void	free_coders(pthread_t *coders)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (coders[i])
-// 		free(&coders[i++]);
-// }
 
 // Create nb_coders thread
 pthread_t	*create_coders(t_config *config)
@@ -45,7 +37,7 @@ pthread_t	*create_coders(t_config *config)
 	while (i < config->nb_coders)
 	{
 		id[i] = i;
-		if (pthread_create(&coders[i], NULL, init_coders, &id[i]) != 0)
+		if (pthread_create(&coders[i], NULL, coders_routine, config) != 0)
 			return (NULL);
 		i++;
 	}
@@ -59,11 +51,8 @@ pthread_t	*create_coders(t_config *config)
 
 t_config	*init_config(char **av)
 {
-	static t_config config;
+	static t_config	config;
 
-	// config = ft_calloc(1, sizeof(t_config));
-	// if (!config)
-	// 	return (NULL);
 	config.nb_coders = atoi(av[1]);
 	config.time_to_burnout = atoi(av[2]);
 	config.time_to_compile = atoi(av[3]);
