@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/27 19:15:52 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/28 21:16:55 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*coders_routine(void *data)
 pthread_t	*create_coders(t_config *config)
 {
 	pthread_t	*coders;
-	t_coder *coder;
+	t_coder		*coder;
 	int			*id;
 	int			i;
 
