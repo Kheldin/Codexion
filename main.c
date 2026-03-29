@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 14:11:47 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 16:29:14 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,22 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 void	*coders_routine(void *data)
 {
-	t_coder *casted_data = (t_coder*)data;
-	printf("I'm thread number: %d\n", casted_data->id);
+	t_coder			*coder;
+	long	start;
+	long	end;
+
+	coder = (t_coder *)data;
+	start = get_time();
+	printf("Thread number: %d compiling for %d ms\n", coder->id,
+		coder->config->time_to_compile);
+	usleep(coder->config->time_to_compile * 1000);
+	end = get_time();
+	printf("thread nb %d, Total time = %ld\n", coder->id, end - start);
 	return (NULL);
 }
 
@@ -33,10 +44,11 @@ pthread_t	*create_coders(t_config *config)
 	coders_threads = ft_calloc((config->nb_coders + 1), sizeof(pthread_t));
 	coders = init_coders(config);
 	if (!coders_threads || !coders)
-		return (NULL); 
+		return (NULL);
 	while (i < config->nb_coders)
 	{
-		if (pthread_create(&coders_threads[i], NULL, coders_routine, &coders[i]) != 0)
+		if (pthread_create(&coders_threads[i], NULL, coders_routine,
+				&coders[i]) != 0)
 			return (NULL);
 		i++;
 	}
