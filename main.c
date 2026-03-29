@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/28 21:16:55 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 14:00:20 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,39 +17,53 @@
 
 void	*coders_routine(void *data)
 {
-	t_config *casted_data = (t_config*)data;
-	printf("I'm thread number: %d\n", casted_data->nb_coders);
+	t_coder *casted_data = (t_coder*)data;
+	printf("I'm thread number: %d\n", casted_data->id);
 	return (NULL);
+}
+
+t_coder	*init_coders(t_config *config)
+{
+	int	i;
+	t_coder	*coders;
+
+	coders = ft_calloc(config->nb_coders, sizeof(t_coder));
+	if (!coders)
+		return (NULL);
+	i = 0;
+	while (i < config->nb_coders)
+	{
+		coders[i].id = i + 1;
+		coders[i].config = config;
+		i++;
+	}
+	return (coders);
 }
 
 // Create nb_coders thread
 pthread_t	*create_coders(t_config *config)
 {
-	pthread_t	*coders;
-	t_coder		*coder;
-	int			*id;
+	pthread_t	*coders_threads;
+	t_coder		*coders;
 	int			i;
 
-	coder = NULL;
 	i = 0;
-	coders = ft_calloc((config->nb_coders + 1), sizeof(pthread_t));
-	id = ft_calloc((config->nb_coders + 1), sizeof(int));
-	if (!coders || !id)
+	coders_threads = ft_calloc((config->nb_coders + 1), sizeof(pthread_t));
+	coders = init_coders(config);
+	if (!coders_threads || !coders)
 		return (NULL);
 	while (i < config->nb_coders)
 	{
-		coder->config = *config;
-		id[i] = i;
-		if (pthread_create(&coders[i], NULL, coders_routine, config) != 0)
+		if (pthread_create(&coders_threads[i], NULL, coders_routine, &coders[i]) != 0)
 			return (NULL);
 		i++;
 	}
 	i = config->nb_coders;
 	while (i)
-		pthread_join(coders[i--], NULL);
-	pthread_join(coders[0], NULL);
-	free(id);
-	return (coders);
+		pthread_join(coders_threads[i--], NULL);
+	pthread_join(coders_threads[0], NULL);
+	free(coders);
+	return (coders_threads);
 }
 
 t_config	*init_config(char **av)
@@ -68,15 +82,15 @@ t_config	*init_config(char **av)
 
 int	main(int ac, char **av)
 {
-	pthread_t	*coders;
+	pthread_t	*coders_threads;
 	t_config	*config;
 
 	if (ac != 9)
 		return (print_instructions());
 	config = init_config(av);
-	coders = create_coders(config);
-	if (!coders)
+	coders_threads = create_coders(config);
+	if (!coders_threads)
 		return (0);
-	free(coders);
+	free(coders_threads);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/27 18:41:47 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 13:56:05 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_config
 
 typedef struct s_coder
 {
-	t_config	config;
+	t_config	*config;
 	int			left;
 	int			right;
 	int			id;
