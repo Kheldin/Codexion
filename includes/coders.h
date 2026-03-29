@@ -6,21 +6,16 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 17:36:21 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 18:04:45 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <unistd.h>
 
-struct s_config;
-
 typedef struct s_dongle
 {
-	float		cooldown;
-	char		*location;
 	int			id;
-
 }				t_dongle;
 
 typedef struct s_config

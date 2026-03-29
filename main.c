@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 17:37:09 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 18:04:32 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 void	*coders_routine(void *data)
 {
-	t_coder			*coder;
+	t_coder	*coder;
 	long	start;
 	long	end;
 
@@ -38,7 +38,6 @@ void	*coders_routine(void *data)
 		coder->compiled++;
 	}
 	end = get_time();
-	printf("thread nb %d, Total time = %ld\n", coder->id, end - start);
 	return (NULL);
 }
 

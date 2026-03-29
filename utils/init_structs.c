@@ -6,12 +6,12 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 17:38:34 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 18:07:15 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "coders.h"
+#include <stdlib.h>
 
 t_coder	*init_coders(t_config *config)
 {
@@ -34,7 +34,7 @@ t_coder	*init_coders(t_config *config)
 
 t_config	*init_config(char **av)
 {
-	static t_config config;
+	static t_config	config;
 
 	config.nb_coders = atoi(av[1]);
 	config.time_to_burnout = atoi(av[2]);
@@ -45,4 +45,19 @@ t_config	*init_config(char **av)
 	config.dongle_cooldown = atoi(av[7]);
 	config.current_time = 0;
 	return (&config);
+}
+
+t_dongle	*init_dongles(t_config config)
+{
+	t_dongle	*dongles;
+	int			i;
+
+	dongles = ft_calloc(config.nb_coders + 1, sizeof(t_dongle));
+	if (!dongles)
+		return (NULL);
+	i = 0;
+	while (i < config.nb_coders)
+	{
+		dongles[i].id = i;
+	}
 }
