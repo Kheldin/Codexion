@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 13:56:05 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 14:12:22 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,3 +42,5 @@ typedef struct s_coder
 void			*ft_calloc(size_t nmemb, size_t size);
 
 int				print_instructions(void);
+t_coder			*init_coders(t_config *config);
+t_config		*init_config(char **av);
