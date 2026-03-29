@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 16:29:14 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 17:37:09 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,18 @@ void	*coders_routine(void *data)
 
 	coder = (t_coder *)data;
 	start = get_time();
-	printf("Thread number: %d compiling for %d ms\n", coder->id,
-		coder->config->time_to_compile);
-	usleep(coder->config->time_to_compile * 1000);
+	while (coder->compiled < coder->config->nb_compile_required)
+	{
+		printf("%d has taken a dongle\n", coder->id);
+		printf("%d is compiling\n", coder->id);
+		usleep(coder->config->time_to_compile * 1000);
+		printf("%d is debugging\n", coder->id);
+		usleep(coder->config->time_to_debug * 1000);
+		printf("%d is refactoring\n", coder->id);
+		usleep(coder->config->time_to_refactor * 1000);
+		usleep(coder->config->time_to_refactor * 1000);
+		coder->compiled++;
+	}
 	end = get_time();
 	printf("thread nb %d, Total time = %ld\n", coder->id, end - start);
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 14:13:23 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 17:38:34 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_coder	*init_coders(t_config *config)
 	{
 		coders[i].id = i + 1;
 		coders[i].config = config;
+		coders[i].compiled = 0;
 		i++;
 	}
 	return (coders);
@@ -42,5 +43,6 @@ t_config	*init_config(char **av)
 	config.time_to_refactor = atoi(av[5]);
 	config.nb_compile_required = atoi(av[6]);
 	config.dongle_cooldown = atoi(av[7]);
+	config.current_time = 0;
 	return (&config);
 }
