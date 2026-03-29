@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 18:04:45 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 19:02:11 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 typedef struct s_dongle
 {
 	int			id;
+	int			taken;
 }				t_dongle;
 
 typedef struct s_config
@@ -40,9 +41,22 @@ typedef struct s_coder
 	int			compiled;
 }				t_coder;
 
+typedef struct s_scheduler
+{
+	t_config	*config;
+	t_coder		*coders;
+	pthread_t	*coders_threads;
+	char		*mode;
+}				t_schedule;
+
 void			*ft_calloc(size_t nmemb, size_t size);
 
 int				print_instructions(void);
+
 t_coder			*init_coders(t_config *config);
 t_config		*init_config(char **av);
+t_dongle		*init_dongles(t_config *config);
+t_schedule		*init_scheduler(t_config *config, pthread_t *coders_thread,
+					t_coder *coders);
+
 long			get_time(void);

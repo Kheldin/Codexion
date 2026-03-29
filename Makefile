@@ -45,7 +45,7 @@ debug: all
 
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	gdb --args ./$(NAME) $(ARG)
+	gdb --args ./$(NAME) $(ARG) 8 500 300 200 300 5 7 str
 
 
 .PHONY: all clean fclean re force debug gdb_debug

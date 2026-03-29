@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 18:04:32 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 19:12:20 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,13 @@ void	*coders_routine(void *data)
 	return (NULL);
 }
 
-// Create nb_coders thread
-pthread_t	*create_coders(t_config *config)
+pthread_t	*create_coders(t_config *config, t_coder *coders)
 {
 	pthread_t	*coders_threads;
-	t_coder		*coders;
 	int			i;
 
 	i = 0;
 	coders_threads = ft_calloc((config->nb_coders + 1), sizeof(pthread_t));
-	coders = init_coders(config);
 	if (!coders_threads || !coders)
 		return (NULL);
 	while (i < config->nb_coders)
@@ -72,13 +69,23 @@ int	main(int ac, char **av)
 {
 	pthread_t	*coders_threads;
 	t_config	*config;
+	t_dongle	*dongles;
+	t_coder		*coders;
+	t_schedule	*schedule;
 
+	printf("ici");
 	if (ac != 9)
 		return (print_instructions());
 	config = init_config(av);
-	coders_threads = create_coders(config);
+	if (!config)
+		return (0);
+	coders = init_coders(config);
+	dongles = init_dongles(config);
+	coders_threads = create_coders(config, coders);
 	if (!coders_threads)
 		return (0);
+	schedule = init_scheduler(config, coders_threads, coders);
 	free(coders_threads);
+	free(schedule);
 	return (0);
 }

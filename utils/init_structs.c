@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 18:07:15 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/29 19:01:25 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,33 @@ t_config	*init_config(char **av)
 	return (&config);
 }
 
-t_dongle	*init_dongles(t_config config)
+t_dongle	*init_dongles(t_config *config)
 {
 	t_dongle	*dongles;
 	int			i;
 
-	dongles = ft_calloc(config.nb_coders + 1, sizeof(t_dongle));
+	dongles = ft_calloc(config->nb_coders + 1, sizeof(t_dongle));
 	if (!dongles)
 		return (NULL);
 	i = 0;
-	while (i < config.nb_coders)
+	while (i < config->nb_coders)
 	{
 		dongles[i].id = i;
+		dongles[i].taken = 0;
 	}
+	return (dongles);
+}
+
+t_schedule	*init_scheduler(t_config *config, pthread_t *coders_thread,
+		t_coder *coders)
+{
+	t_schedule	*schedule;
+
+	schedule = ft_calloc(1, sizeof(t_schedule));
+	if (!schedule)
+		return (NULL);
+	schedule->config = config;
+	schedule->coders_threads = coders_thread;
+	schedule->coders = coders;
+	return (schedule);
 }
