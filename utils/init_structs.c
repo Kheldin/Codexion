@@ -6,14 +6,14 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/30 15:42:47 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/30 16:05:25 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 #include <stdlib.h>
 
-t_coder	*init_coders(t_config *config)
+t_coder	*init_coders(t_config *config, pthread_mutex_t *test_lock)
 {
 	int		i;
 	t_coder	*coders;
@@ -27,6 +27,7 @@ t_coder	*init_coders(t_config *config)
 		coders[i].id = i + 1;
 		coders[i].config = config;
 		coders[i].compiled = 0;
+		coders[i].test_mutex = test_lock;
 		i++;
 	}
 	return (coders);

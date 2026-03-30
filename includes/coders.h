@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 19:02:11 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/30 16:06:28 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_coder
 	int			right;
 	int			id;
 	int			compiled;
+	pthread_mutex_t	*test_mutex;
 }				t_coder;
 
 typedef struct s_scheduler
@@ -53,7 +54,7 @@ void			*ft_calloc(size_t nmemb, size_t size);
 
 int				print_instructions(void);
 
-t_coder			*init_coders(t_config *config);
+t_coder			*init_coders(t_config *config, pthread_mutex_t *test_lock);
 t_config		*init_config(char **av);
 t_dongle		*init_dongles(t_config *config);
 t_schedule		*init_scheduler(t_config *config, pthread_t *coders_thread,

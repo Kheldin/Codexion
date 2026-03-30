@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/30 15:43:09 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/30 16:06:56 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	*coders_routine(void *data)
 	t_coder	*coder;
 
 	coder = (t_coder *)data;
+	pthread_mutex_lock(coder->test_mutex);
 	while (coder->compiled < coder->config->nb_compile_required)
 	{
 		printf("%d has taken a dongle\n", coder->id);
@@ -34,6 +35,7 @@ void	*coders_routine(void *data)
 		usleep(coder->config->time_to_refactor * 1000);
 		coder->compiled++;
 	}
+	pthread_mutex_unlock(coder->test_mutex);
 	return (NULL);
 }
 
@@ -67,13 +69,15 @@ int	main(int ac, char **av)
 	t_dongle	*dongles;
 	t_coder		*coders;
 	t_schedule	*schedule;
+	pthread_mutex_t	test_lock;
 
 	if (ac != 9)
 		return (print_instructions());
+	pthread_mutex_init(&test_lock, NULL);
 	config = init_config(av);
 	if (!config)
 		return (0);
-	coders = init_coders(config);
+	coders = init_coders(config, &test_lock);
 	dongles = init_dongles(config);
 	coders_threads = create_coders(config, coders);
 	if (!coders_threads)

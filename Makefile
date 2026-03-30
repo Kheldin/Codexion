@@ -1,6 +1,6 @@
 NAME		:= codexion
 CC			:= cc
-CFLAGS		:= -pthread # -Wall -Wextra -Werror 
+CFLAGS		:= -Wall -Wextra -Werror  -pthread
 
 SRCDIR		:= .
 DEPDIR		:= .deps
