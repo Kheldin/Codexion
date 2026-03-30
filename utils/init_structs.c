@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 19:01:25 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/30 15:42:47 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_dongle	*init_dongles(t_config *config)
 	{
 		dongles[i].id = i;
 		dongles[i].taken = 0;
+		i++;
 	}
 	return (dongles);
 }

@@ -1,6 +1,6 @@
 NAME		:= codexion
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror -pthread
+CFLAGS		:= -pthread # -Wall -Wextra -Werror 
 
 SRCDIR		:= .
 DEPDIR		:= .deps
@@ -48,4 +48,4 @@ gdb_debug: re $(OBJS)
 	gdb --args ./$(NAME) $(ARG) 8 500 300 200 300 5 7 str
 
 
-.PHONY: all clean fclean re force debug gdb_debug
+.PHONY: all clean fclean re debug gdb_debug

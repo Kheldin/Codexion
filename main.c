@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/29 19:12:20 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/30 15:43:09 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,8 @@
 void	*coders_routine(void *data)
 {
 	t_coder	*coder;
-	long	start;
-	long	end;
 
 	coder = (t_coder *)data;
-	start = get_time();
 	while (coder->compiled < coder->config->nb_compile_required)
 	{
 		printf("%d has taken a dongle\n", coder->id);
@@ -37,7 +34,6 @@ void	*coders_routine(void *data)
 		usleep(coder->config->time_to_refactor * 1000);
 		coder->compiled++;
 	}
-	end = get_time();
 	return (NULL);
 }
 
@@ -61,7 +57,6 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 	while (i)
 		pthread_join(coders_threads[i--], NULL);
 	pthread_join(coders_threads[0], NULL);
-	free(coders);
 	return (coders_threads);
 }
 
@@ -73,7 +68,6 @@ int	main(int ac, char **av)
 	t_coder		*coders;
 	t_schedule	*schedule;
 
-	printf("ici");
 	if (ac != 9)
 		return (print_instructions());
 	config = init_config(av);
@@ -87,5 +81,7 @@ int	main(int ac, char **av)
 	schedule = init_scheduler(config, coders_threads, coders);
 	free(coders_threads);
 	free(schedule);
+	free(dongles);
+	free(coders);
 	return (0);
 }
