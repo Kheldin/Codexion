@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/30 16:05:25 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/31 16:09:50 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 
 t_coder	*init_coders(t_config *config, pthread_mutex_t *test_lock)
 {
-	int		i;
-	t_coder	*coders;
+	int				i;
+	t_coder			*coders;
+	pthread_mutex_t	output_mutex;
 
+	pthread_mutex_init(&output_mutex, NULL);
 	coders = ft_calloc(config->nb_coders, sizeof(t_coder));
 	if (!coders)
 		return (NULL);
@@ -28,6 +30,7 @@ t_coder	*init_coders(t_config *config, pthread_mutex_t *test_lock)
 		coders[i].config = config;
 		coders[i].compiled = 0;
 		coders[i].test_mutex = test_lock;
+		coders[i].output_mutex = &output_mutex;
 		i++;
 	}
 	return (coders);
