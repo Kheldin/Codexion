@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/31 16:09:50 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/31 16:27:20 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@ t_coder	*init_coders(t_config *config, pthread_mutex_t *test_lock)
 	{
 		coders[i].id = i + 1;
 		coders[i].config = config;
-		coders[i].compiled = 0;
-		coders[i].test_mutex = test_lock;
+		coders[i].nb_compile = 0;
+		coders[i].last_compiled = 0;
 		coders[i].output_mutex = &output_mutex;
+		// add left and right dongle here
 		i++;
 	}
 	return (coders);

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/30 16:06:56 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/31 16:27:06 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,25 @@ void	*coders_routine(void *data)
 	t_coder	*coder;
 
 	coder = (t_coder *)data;
-	pthread_mutex_lock(coder->test_mutex);
-	while (coder->compiled < coder->config->nb_compile_required)
+	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
+		pthread_mutex_lock(coder->output_mutex);
 		printf("%d has taken a dongle\n", coder->id);
+		pthread_mutex_unlock(coder->output_mutex);
+		pthread_mutex_lock(coder->output_mutex);
 		printf("%d is compiling\n", coder->id);
+		pthread_mutex_unlock(coder->output_mutex);
 		usleep(coder->config->time_to_compile * 1000);
+		pthread_mutex_lock(coder->output_mutex);
 		printf("%d is debugging\n", coder->id);
+		pthread_mutex_unlock(coder->output_mutex);
 		usleep(coder->config->time_to_debug * 1000);
+		pthread_mutex_lock(coder->output_mutex);
 		printf("%d is refactoring\n", coder->id);
+		pthread_mutex_unlock(coder->output_mutex);
 		usleep(coder->config->time_to_refactor * 1000);
-		usleep(coder->config->time_to_refactor * 1000);
-		coder->compiled++;
+		coder->nb_compile++;
 	}
-	pthread_mutex_unlock(coder->test_mutex);
 	return (NULL);
 }
 
@@ -77,8 +82,8 @@ int	main(int ac, char **av)
 	config = init_config(av);
 	if (!config)
 		return (0);
-	coders = init_coders(config, &test_lock);
 	dongles = init_dongles(config);
+	coders = init_coders(config, &test_lock);
 	coders_threads = create_coders(config, coders);
 	if (!coders_threads)
 		return (0);

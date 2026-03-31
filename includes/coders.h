@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/31 16:07:11 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/03/31 16:27:51 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,50 +15,50 @@
 
 typedef struct s_dongle
 {
-	int			id;
-	int			taken;
-}				t_dongle;
+	int				id;
+	int				taken;
+}					t_dongle;
 
 typedef struct s_config
 {
-	int			nb_coders;
-	int			time_to_burnout;
-	int			time_to_compile;
-	int			time_to_debug;
-	int			time_to_refactor;
-	int			nb_compile_required;
-	int			dongle_cooldown;
-	long		current_time;
-}				t_config;
+	int				nb_coders;
+	int				time_to_burnout;
+	int				time_to_compile;
+	int				time_to_debug;
+	int				time_to_refactor;
+	int				nb_compile_required;
+	int				dongle_cooldown;
+	long			current_time;
+}					t_config;
 
 typedef struct s_coder
 {
-	t_config	*config;
-	long		starting_time;
-	int			left;
-	int			right;
-	int			id;
-	int			compiled;
-	pthread_mutex_t	*test_mutex;
+	t_config		*config;
+	long			starting_time;
+	t_dongle		*left_dongle;
+	t_dongle		*right_dongle;
+	int				id;
+	long			last_compiled; // Stock the timestamps
+	int				nb_compile;
 	pthread_mutex_t	*output_mutex;
-}				t_coder;
+}					t_coder;
 
 typedef struct s_scheduler
 {
-	t_config	*config;
-	t_coder		*coders;
-	pthread_t	*coders_threads;
-	char		*mode;
-}				t_schedule;
+	t_config		*config;
+	t_coder			*coders;
+	pthread_t		*coders_threads;
+	char			*mode;
+}					t_schedule;
 
-void			*ft_calloc(size_t nmemb, size_t size);
+void				*ft_calloc(size_t nmemb, size_t size);
 
-int				print_instructions(void);
+int					print_instructions(void);
 
-t_coder			*init_coders(t_config *config, pthread_mutex_t *test_lock);
-t_config		*init_config(char **av);
-t_dongle		*init_dongles(t_config *config);
-t_schedule		*init_scheduler(t_config *config, pthread_t *coders_thread,
-					t_coder *coders);
+t_coder				*init_coders(t_config *config, pthread_mutex_t *test_lock);
+t_config			*init_config(char **av);
+t_dongle			*init_dongles(t_config *config);
+t_schedule			*init_scheduler(t_config *config, pthread_t *coders_thread,
+						t_coder *coders);
 
-long			get_time(void);
+long				get_time(void);
