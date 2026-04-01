@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/31 16:27:06 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 09:48:52 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,18 @@ void	*coders_routine(void *data)
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
 		pthread_mutex_lock(coder->output_mutex);
-		printf("%d has taken a dongle\n", coder->id);
+		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 		pthread_mutex_unlock(coder->output_mutex);
 		pthread_mutex_lock(coder->output_mutex);
-		printf("%d is compiling\n", coder->id);
+		printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp, coder->id);
 		pthread_mutex_unlock(coder->output_mutex);
 		usleep(coder->config->time_to_compile * 1000);
 		pthread_mutex_lock(coder->output_mutex);
-		printf("%d is debugging\n", coder->id);
+		printf("%ld %d is debugging\n", get_time() - coder->config->begin_timestamp, coder->id);
 		pthread_mutex_unlock(coder->output_mutex);
 		usleep(coder->config->time_to_debug * 1000);
 		pthread_mutex_lock(coder->output_mutex);
-		printf("%d is refactoring\n", coder->id);
+		printf("%ld %d is refactoring\n", get_time() - coder->config->begin_timestamp, coder->id);
 		pthread_mutex_unlock(coder->output_mutex);
 		usleep(coder->config->time_to_refactor * 1000);
 		coder->nb_compile++;
@@ -74,16 +74,16 @@ int	main(int ac, char **av)
 	t_dongle	*dongles;
 	t_coder		*coders;
 	t_schedule	*schedule;
-	pthread_mutex_t	test_lock;
+	long	begin_timestamp;
 
+	begin_timestamp = get_time();
 	if (ac != 9)
 		return (print_instructions());
-	pthread_mutex_init(&test_lock, NULL);
 	config = init_config(av);
 	if (!config)
 		return (0);
 	dongles = init_dongles(config);
-	coders = init_coders(config, &test_lock);
+	coders = init_coders(config);
 	coders_threads = create_coders(config, coders);
 	if (!coders_threads)
 		return (0);

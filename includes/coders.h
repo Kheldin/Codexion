@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/03/31 16:27:51 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 09:50:22 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,16 @@ typedef struct s_config
 	int				time_to_refactor;
 	int				nb_compile_required;
 	int				dongle_cooldown;
-	long			current_time;
+	long			begin_timestamp;
 }					t_config;
 
 typedef struct s_coder
 {
 	t_config		*config;
-	long			starting_time;
 	t_dongle		*left_dongle;
 	t_dongle		*right_dongle;
 	int				id;
-	long			last_compiled; // Stock the timestamps
+	long			last_compiled;
 	int				nb_compile;
 	pthread_mutex_t	*output_mutex;
 }					t_coder;
@@ -55,7 +54,7 @@ void				*ft_calloc(size_t nmemb, size_t size);
 
 int					print_instructions(void);
 
-t_coder				*init_coders(t_config *config, pthread_mutex_t *test_lock);
+t_coder				*init_coders(t_config *config);
 t_config			*init_config(char **av);
 t_dongle			*init_dongles(t_config *config);
 t_schedule			*init_scheduler(t_config *config, pthread_t *coders_thread,
