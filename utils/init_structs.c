@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 13:56:58 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 16:03:38 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,21 @@
 static void	set_coders_dongles(t_coder *coder, t_dongle *dongles, int pos,
 		int nb_coders)
 {
+	pthread_cond_t	dongle_waiting;
+
+	pthread_cond_init(&dongle_waiting, NULL);
+	coder->dongles_waiting = &dongle_waiting;
 	if (pos == 0)
 	{
 		coder->left_dongle = &dongles[nb_coders - 1];
 		coder->right_dongle = &dongles[pos];
+		return;
 	}
 	else if (pos == nb_coders - 1)
 	{
 		coder->left_dongle = &dongles[pos];
 		coder->right_dongle = &dongles[0];
+		return;
 	}
 	coder->left_dongle = &dongles[pos - 1];
 	coder->right_dongle = &dongles[pos];
