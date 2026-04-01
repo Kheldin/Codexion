@@ -6,12 +6,29 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 12:03:20 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 13:56:58 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 #include <stdlib.h>
+
+static void	set_coders_dongles(t_coder *coder, t_dongle *dongles, int pos,
+		int nb_coders)
+{
+	if (pos == 0)
+	{
+		coder->left_dongle = &dongles[nb_coders - 1];
+		coder->right_dongle = &dongles[pos];
+	}
+	else if (pos == nb_coders - 1)
+	{
+		coder->left_dongle = &dongles[pos];
+		coder->right_dongle = &dongles[0];
+	}
+	coder->left_dongle = &dongles[pos - 1];
+	coder->right_dongle = &dongles[pos];
+}
 
 t_coder	*init_coders(t_config *config, t_dongle *dongles)
 {
@@ -31,22 +48,7 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 		coders[i].nb_compile = 0;
 		coders[i].last_compiled = 0;
 		coders[i].output_mutex = &output_mutex;
-		if (i == 0)
-		{
-			coders[i].left_dongle = &dongles[config->nb_coders - 1];
-			coders[i].right_dongle = &dongles[i];
-			i++;
-			continue;
-		}
-		else if (i == config->nb_coders - 1)
-		{
-			coders[i].left_dongle = &dongles[i];
-			coders[i].right_dongle = &dongles[0];
-			i++;
-			continue;
-		}
-		coders[i].left_dongle = &dongles[i - 1];
-		coders[i].right_dongle = &dongles[i];
+		set_coders_dongles(&coders[i], dongles, i, config->nb_coders);
 		i++;
 	}
 	return (coders);

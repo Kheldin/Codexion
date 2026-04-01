@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 11:25:30 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 13:56:35 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	*coders_routine(void *data)
 	coder = (t_coder *)data;
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
+		
 		pthread_mutex_lock(coder->output_mutex);
 		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 		pthread_mutex_unlock(coder->output_mutex);
@@ -70,6 +71,7 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 int	main(int ac, char **av)
 {
 	pthread_t	*coders_threads;
+	pthread_cond_t	dongles_waiting;
 	t_config	*config;
 	t_dongle	*dongles;
 	t_coder		*coders;
@@ -82,6 +84,7 @@ int	main(int ac, char **av)
 	config = init_config(av);
 	if (!config)
 		return (0);
+	pthread_cond_init(&dongles_waiting, NULL);
 	dongles = init_dongles(config);
 	coders = init_coders(config, dongles);
 	coders_threads = create_coders(config, coders);
