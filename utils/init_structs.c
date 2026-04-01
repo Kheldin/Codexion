@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 12:01:23 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 12:03:20 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 		}
 		else if (i == config->nb_coders - 1)
 		{
-			coders[i].left_dongle = &dongles[0];
-			coders[i].right_dongle = &dongles[i];
+			coders[i].left_dongle = &dongles[i];
+			coders[i].right_dongle = &dongles[0];
 			i++;
 			continue;
 		}
