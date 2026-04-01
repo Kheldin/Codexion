@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 09:50:22 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 11:27:57 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void				*ft_calloc(size_t nmemb, size_t size);
 
 int					print_instructions(void);
 
-t_coder				*init_coders(t_config *config);
+t_coder	*init_coders(t_config *config, t_dongle *dongles);
 t_config			*init_config(char **av);
 t_dongle			*init_dongles(t_config *config);
 t_schedule			*init_scheduler(t_config *config, pthread_t *coders_thread,

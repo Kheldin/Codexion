@@ -6,14 +6,14 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 09:46:13 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 12:01:23 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 #include <stdlib.h>
 
-t_coder	*init_coders(t_config *config)
+t_coder	*init_coders(t_config *config, t_dongle *dongles)
 {
 	int				i;
 	t_coder			*coders;
@@ -31,7 +31,22 @@ t_coder	*init_coders(t_config *config)
 		coders[i].nb_compile = 0;
 		coders[i].last_compiled = 0;
 		coders[i].output_mutex = &output_mutex;
-		// add left and right dongle here
+		if (i == 0)
+		{
+			coders[i].left_dongle = &dongles[config->nb_coders - 1];
+			coders[i].right_dongle = &dongles[i];
+			i++;
+			continue;
+		}
+		else if (i == config->nb_coders - 1)
+		{
+			coders[i].left_dongle = &dongles[0];
+			coders[i].right_dongle = &dongles[i];
+			i++;
+			continue;
+		}
+		coders[i].left_dongle = &dongles[i - 1];
+		coders[i].right_dongle = &dongles[i];
 		i++;
 	}
 	return (coders);
