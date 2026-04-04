@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 16:12:34 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/04 18:44:10 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,11 @@
 static void	set_coders_dongles(t_coder *coder, t_dongle *dongles, int pos,
 		int nb_coders)
 {
-	pthread_cond_t	dongle_waiting;
+	pthread_cond_t	*dongle_waiting;
 
-	pthread_cond_init(&dongle_waiting, NULL);
-	coder->dongles_waiting = &dongle_waiting;
+	dongle_waiting = ft_calloc(1, sizeof(pthread_cond_t));
+	pthread_cond_init(dongle_waiting, NULL);
+	coder->dongles_waiting = dongle_waiting;
 	if (pos == 0)
 	{
 		coder->left_dongle = &dongles[nb_coders - 1];
@@ -40,9 +41,10 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 {
 	int				i;
 	t_coder			*coders;
-	pthread_mutex_t	output_mutex;
+	pthread_mutex_t	*output_mutex;
 
-	pthread_mutex_init(&output_mutex, NULL);
+	output_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
+	pthread_mutex_init(output_mutex, NULL);
 	coders = ft_calloc(config->nb_coders, sizeof(t_coder));
 	if (!coders)
 		return (NULL);
@@ -53,7 +55,7 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 		coders[i].config = config;
 		coders[i].nb_compile = 0;
 		coders[i].last_compiled = 0;
-		coders[i].output_mutex = &output_mutex;
+		coders[i].output_mutex = output_mutex;
 		set_coders_dongles(&coders[i], dongles, i, config->nb_coders);
 		i++;
 	}
@@ -77,10 +79,13 @@ t_config	*init_config(char **av)
 
 static void	set_dongle_mutex(t_dongle *dongle)
 {
-	pthread_mutex_t	dongle_mutex;
+	pthread_mutex_t	*dongle_mutex;
 
-	pthread_mutex_init(&dongle_mutex, NULL);
-	dongle->dongle_mutex = &dongle_mutex;
+	dongle_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
+	if (!dongle_mutex)
+		return;
+	pthread_mutex_init(dongle_mutex, NULL);
+	dongle->dongle_mutex = dongle_mutex;
 }
 
 t_dongle	*init_dongles(t_config *config)

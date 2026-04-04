@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/04 15:34:57 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/04 18:40:23 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,19 @@ void	*coders_routine(void *data)
 	coder = (t_coder *)data;
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
-		// pthread_mutex_lock(coder->left_dongle->dongle_mutex);
-		// pthread_mutex_lock(coder->right_dongle->dongle_mutex);
-		// while (coder->left_dongle->taken)
-		// {
-		// 	pthread_cond_wait(coder->dongles_waiting, coder->left_dongle->dongle_mutex);
-		// }
-		// coder->left_dongle->taken = 1;
-		// while (coder->right_dongle->taken)
-		// {	
-		// 	pthread_cond_wait(coder->dongles_waiting, coder->right_dongle->dongle_mutex);
-		// }
-		// coder->right_dongle->taken = 1;
+		pthread_mutex_lock(coder->left_dongle->dongle_mutex);
+		pthread_mutex_lock(coder->right_dongle->dongle_mutex);
+		while (coder->left_dongle->taken)
+		{
+			pthread_cond_wait(coder->dongles_waiting, coder->left_dongle->dongle_mutex);
+		}
+		coder->left_dongle->taken = 1;
+		while (coder->right_dongle->taken)
+		{	
+			pthread_cond_wait(coder->dongles_waiting, coder->right_dongle->dongle_mutex);
+		}
+		coder->right_dongle->taken = 1;
+		printf("thread nb = %d, adress = %p\n", coder->id, coder->output_mutex);
 		pthread_mutex_lock(coder->output_mutex);
 		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 		
@@ -48,8 +49,8 @@ void	*coders_routine(void *data)
 		coder->left_dongle->taken = 0;
 		coder->right_dongle->taken = 0;
 		// pthread_cond_broadcast(coder->dongles_waiting);
-		// pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
-		// pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
+		pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
+		pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
 
 		pthread_mutex_lock(coder->output_mutex);
 		printf("%ld %d is debugging\n", get_time() - coder->config->begin_timestamp, coder->id);
