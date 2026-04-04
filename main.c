@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/04 18:40:23 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/04 18:52:05 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,20 @@ void	*coders_routine(void *data)
 		{
 			pthread_cond_wait(coder->dongles_waiting, coder->left_dongle->dongle_mutex);
 		}
+		pthread_mutex_lock(coder->output_mutex);
+		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
+		pthread_mutex_unlock(coder->output_mutex);
 		coder->left_dongle->taken = 1;
 		while (coder->right_dongle->taken)
 		{	
 			pthread_cond_wait(coder->dongles_waiting, coder->right_dongle->dongle_mutex);
 		}
-		coder->right_dongle->taken = 1;
-		printf("thread nb = %d, adress = %p\n", coder->id, coder->output_mutex);
 		pthread_mutex_lock(coder->output_mutex);
 		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
+		pthread_mutex_unlock(coder->output_mutex);
+		coder->right_dongle->taken = 1;
 		
 		// ========================= Compiling =================================
-		pthread_mutex_unlock(coder->output_mutex);
 		pthread_mutex_lock(coder->output_mutex);
 		printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp, coder->id);
 		pthread_mutex_unlock(coder->output_mutex);
@@ -116,5 +118,6 @@ int	main(int ac, char **av)
 	// free(schedule);
 	free(dongles);
 	free(coders);
+	// Dont forget to destroy every cond and mutexes
 	return (0);
 }
