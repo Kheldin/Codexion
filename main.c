@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 13:56:35 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/04 15:34:57 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,33 @@ void	*coders_routine(void *data)
 	coder = (t_coder *)data;
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
-		
+		// pthread_mutex_lock(coder->left_dongle->dongle_mutex);
+		// pthread_mutex_lock(coder->right_dongle->dongle_mutex);
+		// while (coder->left_dongle->taken)
+		// {
+		// 	pthread_cond_wait(coder->dongles_waiting, coder->left_dongle->dongle_mutex);
+		// }
+		// coder->left_dongle->taken = 1;
+		// while (coder->right_dongle->taken)
+		// {	
+		// 	pthread_cond_wait(coder->dongles_waiting, coder->right_dongle->dongle_mutex);
+		// }
+		// coder->right_dongle->taken = 1;
 		pthread_mutex_lock(coder->output_mutex);
 		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
+		
+		// ========================= Compiling =================================
 		pthread_mutex_unlock(coder->output_mutex);
 		pthread_mutex_lock(coder->output_mutex);
 		printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp, coder->id);
 		pthread_mutex_unlock(coder->output_mutex);
 		usleep(coder->config->time_to_compile * 1000);
+		coder->left_dongle->taken = 0;
+		coder->right_dongle->taken = 0;
+		// pthread_cond_broadcast(coder->dongles_waiting);
+		// pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
+		// pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
+
 		pthread_mutex_lock(coder->output_mutex);
 		printf("%ld %d is debugging\n", get_time() - coder->config->begin_timestamp, coder->id);
 		pthread_mutex_unlock(coder->output_mutex);
@@ -41,6 +60,7 @@ void	*coders_routine(void *data)
 		pthread_mutex_unlock(coder->output_mutex);
 		usleep(coder->config->time_to_refactor * 1000);
 		coder->nb_compile++;
+		
 	}
 	return (NULL);
 }
@@ -75,7 +95,7 @@ int	main(int ac, char **av)
 	t_config	*config;
 	t_dongle	*dongles;
 	t_coder		*coders;
-	t_schedule	*schedule;
+	// t_schedule	*schedule;
 	long	begin_timestamp;
 
 	begin_timestamp = get_time();
@@ -90,9 +110,9 @@ int	main(int ac, char **av)
 	coders_threads = create_coders(config, coders);
 	if (!coders_threads)
 		return (0);
-	schedule = init_scheduler(config, coders_threads, coders);
+	// schedule = init_scheduler(config, coders_threads, coders);
 	free(coders_threads);
-	free(schedule);
+	// free(schedule);
 	free(dongles);
 	free(coders);
 	return (0);

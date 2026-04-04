@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 14:04:10 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 16:12:15 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ typedef struct s_dongle
 {
 	int				id;
 	int				taken;
+	pthread_mutex_t	*dongle_mutex;
 }					t_dongle;
 
 typedef struct s_config
@@ -55,7 +56,7 @@ void				*ft_calloc(size_t nmemb, size_t size);
 
 int					print_instructions(void);
 
-t_coder	*init_coders(t_config *config, t_dongle *dongles);
+t_coder				*init_coders(t_config *config, t_dongle *dongles);
 t_config			*init_config(char **av);
 t_dongle			*init_dongles(t_config *config);
 t_schedule			*init_scheduler(t_config *config, pthread_t *coders_thread,

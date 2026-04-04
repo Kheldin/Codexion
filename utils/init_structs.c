@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 16:03:38 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/01 16:12:34 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,14 @@ t_config	*init_config(char **av)
 	return (&config);
 }
 
+static void	set_dongle_mutex(t_dongle *dongle)
+{
+	pthread_mutex_t	dongle_mutex;
+
+	pthread_mutex_init(&dongle_mutex, NULL);
+	dongle->dongle_mutex = &dongle_mutex;
+}
+
 t_dongle	*init_dongles(t_config *config)
 {
 	t_dongle	*dongles;
@@ -88,6 +96,7 @@ t_dongle	*init_dongles(t_config *config)
 	{
 		dongles[i].id = i;
 		dongles[i].taken = 0;
+		set_dongle_mutex(&dongles[i]);
 		i++;
 	}
 	return (dongles);
