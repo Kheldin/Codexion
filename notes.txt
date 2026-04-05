@@ -5,3 +5,6 @@ todo:
     - Scheduler with fifo/edf
     - Destroy every mutex and dongle at the end
     - Free everything
+
+pb: 
+    - Attribution of dongles not working

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/05 17:26:51 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/05 18:44:16 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	*coders_routine(void *data)
 		refactor(coder);
 		coder->nb_compile++;
 	}
+	// printf("thread nb %d | dongle left = %p | dongle right = %p\n", coder->id, coder->left_dongle, coder->right_dongle);
 	return (NULL);
 }
 

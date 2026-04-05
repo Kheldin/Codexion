@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/05 17:27:19 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/05 18:29:02 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 
 static int	acquire_dongles(t_coder *coder)
 {
+	pthread_mutex_lock(coder->left_dongle->dongle_mutex);
+	pthread_mutex_lock(coder->right_dongle->dongle_mutex);
 	while (coder->left_dongle->taken)
 	{
 		pthread_cond_wait(coder->dongles_waiting, coder->left_dongle->dongle_mutex);
@@ -39,9 +41,7 @@ static int	acquire_dongles(t_coder *coder)
 }
 
 int	compile(t_coder *coder)
-{
-	pthread_mutex_lock(coder->left_dongle->dongle_mutex);
-	pthread_mutex_lock(coder->right_dongle->dongle_mutex);
+{	
 	acquire_dongles(coder);
 	pthread_mutex_lock(coder->output_mutex);
 	printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp, coder->id);

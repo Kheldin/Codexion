@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/04 18:44:10 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/05 18:43:36 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ static void	set_coders_dongles(t_coder *coder, t_dongle *dongles, int pos,
 	}
 	else if (pos == nb_coders - 1)
 	{
-		coder->left_dongle = &dongles[pos];
-		coder->right_dongle = &dongles[0];
+		coder->left_dongle = &dongles[pos - 1];
+		coder->right_dongle = &dongles[pos];
 		return;
 	}
-	coder->left_dongle = &dongles[pos - 1];
-	coder->right_dongle = &dongles[pos];
+	else
+	{
+		coder->left_dongle = &dongles[pos - 1];
+		coder->right_dongle = &dongles[pos];
+	}
 }
 
 t_coder	*init_coders(t_config *config, t_dongle *dongles)
