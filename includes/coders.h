@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/01 16:12:15 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/05 16:27:55 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,3 +63,5 @@ t_schedule			*init_scheduler(t_config *config, pthread_t *coders_thread,
 						t_coder *coders);
 
 long				get_time(void);
+
+int	compile(t_coder *coder);
