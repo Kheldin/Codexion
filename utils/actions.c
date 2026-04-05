@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/05 16:32:07 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/05 17:27:19 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,23 @@ int	compile(t_coder *coder)
 	coder->right_dongle->taken = 0;
 	pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
 	pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
+	return (0);
+}
+
+int	debug(t_coder *coder)
+{
+	pthread_mutex_lock(coder->output_mutex);
+	printf("%ld %d is debugging\n", get_time() - coder->config->begin_timestamp, coder->id);
+	pthread_mutex_unlock(coder->output_mutex);
+	usleep(coder->config->time_to_debug * 1000);
+	return (0);
+}
+
+int	refactor(t_coder *coder)
+{
+	pthread_mutex_lock(coder->output_mutex);
+	printf("%ld %d is refactoring\n", get_time() - coder->config->begin_timestamp, coder->id);
+	pthread_mutex_unlock(coder->output_mutex);
+	usleep(coder->config->time_to_refactor * 1000);
 	return (0);
 }

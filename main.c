@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/05 16:40:14 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/05 17:26:51 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,9 @@ void	*coders_routine(void *data)
 		// ========================= Compiling =================================
 		compile(coder);
 		// ========================= Debuging =================================
-		pthread_mutex_lock(coder->output_mutex);
-		printf("%ld %d is debugging\n", get_time() - coder->config->begin_timestamp, coder->id);
-		pthread_mutex_unlock(coder->output_mutex);
-		usleep(coder->config->time_to_debug * 1000);
-
+		debug(coder);
 		// ========================= Refactoring =================================
-		pthread_mutex_lock(coder->output_mutex);
-		printf("%ld %d is refactoring\n", get_time() - coder->config->begin_timestamp, coder->id);
-		pthread_mutex_unlock(coder->output_mutex);
-		usleep(coder->config->time_to_refactor * 1000);
+		refactor(coder);
 		coder->nb_compile++;
 	}
 	return (NULL);
