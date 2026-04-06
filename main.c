@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/05 18:44:16 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/06 21:00:12 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ int	main(int ac, char **av)
 	t_dongle	*dongles;
 	t_coder		*coders;
 	// t_schedule	*schedule;
-	long	begin_timestamp;
+	// long	begin_timestamp;
 
-	begin_timestamp = get_time();
+	// begin_timestamp = get_time();
 	if (ac != 9)
 		return (print_instructions());
 	config = init_config(av);
