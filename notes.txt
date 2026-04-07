@@ -7,4 +7,8 @@ todo:
     - Free everything
 
 pb: 
-    - Attribution of dongles not working
+    
+
+sleep dongle:
+    - each dongle in a separate thread, routine just make them wake and sleep ?
+    - each coder check if now - dongle.last_compiled is >= required_sleep

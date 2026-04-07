@@ -49,3 +49,6 @@ gdb_debug: re $(OBJS)
 
 
 .PHONY: all clean fclean re debug gdb_debug
+
+# valgrind --tool=helgrind -s ./$(NAME)
+# valgrind --leak-check=full --show-leak-kinds=all -s

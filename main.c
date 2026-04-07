@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/06 21:00:12 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/07 11:41:57 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,11 @@ void	*coders_routine(void *data)
 	coder = (t_coder *)data;
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
-		// ========================= Compiling =================================
 		compile(coder);
-		// ========================= Debuging =================================
 		debug(coder);
-		// ========================= Refactoring =================================
 		refactor(coder);
 		coder->nb_compile++;
 	}
-	// printf("thread nb %d | dongle left = %p | dongle right = %p\n", coder->id, coder->left_dongle, coder->right_dongle);
 	return (NULL);
 }
 
