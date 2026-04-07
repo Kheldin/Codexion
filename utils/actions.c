@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/07 15:14:05 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/07 16:56:31 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@
 static int	acquire_dongles(t_coder *coder)
 {
 	pthread_mutex_lock(coder->left_dongle->dongle_mutex);
+	// line below: create a deadlock but solve many helgrind error if i put it above the other while. 
 	pthread_mutex_lock(coder->right_dongle->dongle_mutex);
-	while (coder->left_dongle->taken || get_time() - coder->left_dongle->last_used < coder->config->dongle_cooldown)
+	while (coder->left_dongle->taken)
 	{
 		printf("coder = %d\n", coder->id);
 		printf("now = %ld\n", get_time());
@@ -33,7 +34,7 @@ static int	acquire_dongles(t_coder *coder)
 	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 	pthread_mutex_unlock(coder->output_mutex);
 	coder->left_dongle->taken = 1;
-	while (coder->right_dongle->taken || get_time() - coder->right_dongle->last_used < coder->config->dongle_cooldown)
+	while (coder->right_dongle->taken)
 	{	
 		printf("coder = %d\n", coder->id);
 		printf("now - last_used = %ld\n", get_time() - coder->right_dongle->last_used);

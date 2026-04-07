@@ -7,7 +7,8 @@ todo:
     - Free everything
 
 pb: 
-    
+    - Deadlock happens when trying to get dongles
+    - hellgrind errors
 
 sleep dongle:
     - each dongle in a separate thread, routine just make them wake and sleep ?
