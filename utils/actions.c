@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/07 16:56:31 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/08 10:01:39 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,22 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+static void	lock_dongles(t_coder *coder)
+{
+	if (coder->right_dongle->id < coder->left_dongle->id)
+	{
+		pthread_mutex_lock(coder->right_dongle->dongle_mutex);
+		pthread_mutex_lock(coder->left_dongle->dongle_mutex);
+		return;
+	}
+	pthread_mutex_lock(coder->left_dongle->dongle_mutex);
+	pthread_mutex_lock(coder->right_dongle->dongle_mutex);
+	return;
+}
+
 static int	acquire_dongles(t_coder *coder)
 {
-	pthread_mutex_lock(coder->left_dongle->dongle_mutex);
 	// line below: create a deadlock but solve many helgrind error if i put it above the other while. 
-	pthread_mutex_lock(coder->right_dongle->dongle_mutex);
 	while (coder->left_dongle->taken)
 	{
 		printf("coder = %d\n", coder->id);
@@ -49,6 +60,7 @@ static int	acquire_dongles(t_coder *coder)
 
 int	compile(t_coder *coder)
 {	
+	lock_dongles(coder);
 	acquire_dongles(coder);
 	pthread_mutex_lock(coder->output_mutex);
 	printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp, coder->id);
