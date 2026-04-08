@@ -17,6 +17,13 @@ pb:
         Peut etre que cest le role du scheduler de gerer ca. (Jvois pas comment faire avec seulement broadcast mais bon)
         ou alors faut juste attendre que les deux dongles soit libre avant de lock le premier
 
+        En tout cas mes dongles sont correctement attribuer
+
+        je pense que mes dongles_waiting cond sont useless pcq si le lock echoue, on attend jusqua pouvoir le lock.
+        
+        Pour les sleep des dongles, au lieu de faire des thread, je peux utiliser une cond dongles_waiting qui check si 
+            - get_time() - dongle.last_use < config.dongle_cooldown
+
 sleep dongle:
     - each dongle in a separate thread, routine just make them wake and sleep ?
     - each coder check if now - dongle.last_compiled is >= required_sleep

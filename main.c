@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/08 11:08:00 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/08 11:37:06 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*coders_routine(void *data)
 	t_coder	*coder;
 
 	coder = (t_coder *)data;
-	printf("\nthread nb %d created\n\n", coder->id);
+	// printf("\nthread nb %d created\n\n", coder->id);
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
 		compile(coder);
