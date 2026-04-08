@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/08 10:01:39 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/08 11:01:40 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,12 @@ static void	lock_dongles(t_coder *coder)
 
 static int	acquire_dongles(t_coder *coder)
 {
-	// line below: create a deadlock but solve many helgrind error if i put it above the other while. 
 	while (coder->left_dongle->taken)
 	{
-		printf("coder = %d\n", coder->id);
-		printf("now = %ld\n", get_time());
-		printf("last used = %ld\n", coder->left_dongle->last_used);
-		printf("now - last_used = %ld\n", get_time() - coder->left_dongle->last_used);
+		// printf("coder = %d\n", coder->id);
+		// printf("now = %ld\n", get_time());
+		// printf("last used = %ld\n", coder->left_dongle->last_used);
+		// printf("now - last_used = %ld\n", get_time() - coder->left_dongle->last_used);
 		pthread_cond_wait(coder->dongles_waiting, coder->left_dongle->dongle_mutex);
 	}
 	pthread_mutex_lock(coder->output_mutex);
@@ -47,8 +46,8 @@ static int	acquire_dongles(t_coder *coder)
 	coder->left_dongle->taken = 1;
 	while (coder->right_dongle->taken)
 	{	
-		printf("coder = %d\n", coder->id);
-		printf("now - last_used = %ld\n", get_time() - coder->right_dongle->last_used);
+		// printf("coder = %d\n", coder->id);
+		// printf("now - last_used = %ld\n", get_time() - coder->right_dongle->last_used);
 		pthread_cond_wait(coder->dongles_waiting, coder->right_dongle->dongle_mutex);
 	}
 	pthread_mutex_lock(coder->output_mutex);
@@ -70,7 +69,6 @@ int	compile(t_coder *coder)
 	coder->right_dongle->taken = 0;
 	coder->left_dongle->last_used = get_time();
 	coder->right_dongle->last_used = get_time();
-	// printf("\nlast used = %ld\n", coder->right_dongle->last_used);
 	pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
 	pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
 	return (0);

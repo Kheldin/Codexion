@@ -7,9 +7,22 @@ todo:
     - Free everything
 
 pb: 
-    - Deadlock happens when trying to get dongles
-    - hellgrind errors
+    - ./codexion 6 500 300 200 300 4 1000 str
+        - Dans ce cas, parfois, quand 1 et 3 compilemt, 5 ne fait rien alors qu'il pourrait compiler egalement
+        - Seulement PARFOIS, il compile souvent egalement.
+    - Je pense avoir un soucis au niveau des lock. Un dongle peut lock le dongle de droite par exemple et attendre que le gauche se libere.
+        ce qui bloque ducoup le coder a sa droite aussi alors que le coder a sa droite a lui peut etre choper son dongle de droite.
+        Donc perte de temps / pas opti. 
+
+        Peut etre que cest le role du scheduler de gerer ca. (Jvois pas comment faire avec seulement broadcast mais bon)
+        ou alors faut juste attendre que les deux dongles soit libre avant de lock le premier
 
 sleep dongle:
     - each dongle in a separate thread, routine just make them wake and sleep ?
     - each coder check if now - dongle.last_compiled is >= required_sleep
+
+je creer un tthread du dongle qui va prendre le dongle et donc son mutex, le lock en gardant taken = 1 puis sleep.
+recreer et detruire ces thread a chaque fois nest pas opti 
+donc init au debut 
+
+faut faire une cond pour "reveiller" la routine du dongle et lendormir jimagine
