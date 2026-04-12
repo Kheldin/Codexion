@@ -18,7 +18,7 @@ void	*dongle_manager_routine(void *data)
 	t_dongle_manager	*manager;
 
 
-    // MUTEX SUR ON_CD
+    // MUTEX SUR ON_CD ? 
 	manager = (t_dongle_manager *)data;
 	while (1)
 	{

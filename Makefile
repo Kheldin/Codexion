@@ -8,7 +8,7 @@ INCDIR		:= includes
 BUILDDIR	:= build
 
 SRCFILES	:= main.c utils/ft_calloc.c utils/print_instructions.c utils/init_structs.c \
-			   utils/get_time.c utils/actions.c utils/dongles_managers.c
+			   utils/get_time.c utils/actions.c utils/dongles_managers.c utils/print_lock.c
 
 OBJS		:= $(addprefix $(BUILDDIR)/,$(SRCFILES:.c=.o))
 HEADERS		:= $(INCDIR)/coders.h
@@ -41,7 +41,7 @@ re: fclean all
 
 debug: all
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	valgrind --trace-children=yes --track-fds=yes --tool=helgrind -s ./$(NAME) 8 500 300 200 300 5 7 str
+	valgrind --trace-children=yes --track-fds=yes --tool=helgrind -s ./$(NAME) 8 500 200 150 100 5 1 str
 
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)

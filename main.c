@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/12 16:45:30 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/12 18:43:08 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 int	main(int ac, char **av)
 {
 	pthread_t	*coders_threads;
-	pthread_cond_t	dongles_waiting;
 	t_config	*config;
 	t_dongle	*dongles;
 	t_coder		*coders;
@@ -70,7 +69,6 @@ int	main(int ac, char **av)
 	config = init_config(av);
 	if (!config)
 		return (0);
-	pthread_cond_init(&dongles_waiting, NULL);
 	dongles = init_dongles(config);
 	dongles_managers(dongles, config->nb_coders, config->dongle_cooldown);
 	coders = init_coders(config, dongles);
