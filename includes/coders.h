@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/12 13:31:02 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/12 15:27:41 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,16 @@ typedef struct s_dongle
 	int				id;
 	int				taken;
 	long			last_used;
-	int				*on_cd;
+	int				on_cd;
 	pthread_mutex_t	*dongle_mutex;
 	pthread_cond_t	*cd_cond;
 }					t_dongle;
+
+typedef struct s_dongle_manager
+{
+	t_dongle	*dongle;
+	int			dongle_cooldown;
+} t_dongle_manager;
 
 typedef struct s_config
 {
@@ -70,3 +76,5 @@ long				get_time(void);
 int	compile(t_coder *coder);
 int	debug(t_coder *coder);
 int	refactor(t_coder *coder);
+
+void	dongles_managers(t_dongle *dongles, int nb_dongles, int dongle_cooldown);

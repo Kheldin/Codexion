@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/12 13:31:11 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/12 16:47:14 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,20 @@ static void	lock_dongles(t_coder *coder)
 
 static int	acquire_dongles(t_coder *coder)
 {
-	while (get_time() - coder->left_dongle->last_used < coder->config->dongle_cooldown)
+	while (coder->left_dongle->on_cd)
 	{
+		// printf("\n\n waiting \n\n");
 		// usleep((get_time() - coder->left_dongle->last_used ) * 1000);
-		pthread_cond_wait(coder->dongles_waiting, coder->left_dongle->dongle_mutex);
+		pthread_cond_wait(coder->left_dongle->cd_cond, coder->left_dongle->dongle_mutex);
 	}
 	pthread_mutex_lock(coder->output_mutex);
 	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 	pthread_mutex_unlock(coder->output_mutex);
 	coder->left_dongle->taken = 1;
-	while (get_time() - coder->left_dongle->last_used < coder->config->dongle_cooldown)
+	while (coder->right_dongle->on_cd)
 	{	
-		pthread_cond_wait(coder->dongles_waiting, coder->right_dongle->dongle_mutex);
+		// printf("\n\n waiting \n\n");
+		pthread_cond_wait(coder->right_dongle->cd_cond, coder->right_dongle->dongle_mutex);
 		// usleep((get_time() - coder->left_dongle->last_used ) * 1000);
 	}
 	pthread_mutex_lock(coder->output_mutex);
@@ -55,7 +57,6 @@ static int	acquire_dongles(t_coder *coder)
 
 int	compile(t_coder *coder)
 {	
-	// All coders here at the same time (almost)
 	lock_dongles(coder);
 	acquire_dongles(coder);
 	pthread_mutex_lock(coder->output_mutex);
@@ -66,6 +67,8 @@ int	compile(t_coder *coder)
 	coder->right_dongle->taken = 0;
 	coder->left_dongle->last_used = get_time();
 	coder->right_dongle->last_used = get_time();
+	coder->left_dongle->on_cd = 1;
+	coder->right_dongle->on_cd = 1;
 	pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
 	pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
 	// pthread_cond_broadcast()
