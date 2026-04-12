@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/10 15:37:32 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/12 13:33:59 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,17 @@ static void	set_dongle_mutex(t_dongle *dongle)
 	dongle->dongle_mutex = dongle_mutex;
 }
 
+static void	set_dongle_cond(t_dongle *dongle)
+{
+	pthread_cond_t	*cd_cond;
+
+	cd_cond = ft_calloc(1, sizeof(pthread_cond_t));
+	if (!cd_cond)
+		return;
+	pthread_cond_init(cd_cond, NULL);
+	dongle->cd_cond = cd_cond;
+}
+
 t_dongle	*init_dongles(t_config *config)
 {
 	t_dongle	*dongles;
@@ -106,6 +117,7 @@ t_dongle	*init_dongles(t_config *config)
 		dongles[i].taken = 0;
 		dongles[i].last_used = get_time() - config->dongle_cooldown;
 		set_dongle_mutex(&dongles[i]);
+		set_dongle_cond(&dongles[i]);
 		i++;
 	}
 	return (dongles);

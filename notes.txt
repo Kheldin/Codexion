@@ -17,19 +17,8 @@ pb:
         Peut etre que cest le role du scheduler de gerer ca. (Jvois pas comment faire avec seulement broadcast mais bon)
         ou alors faut juste attendre que les deux dongles soit libre avant de lock le premier
 
-        En tout cas mes dongles sont correctement attribuer
 
-        je pense que mes dongles_waiting cond sont useless pcq si le lock echoue, on attend jusqua pouvoir le lock.
-        
-        Pour les sleep des dongles, au lieu de faire des thread, je peux utiliser une cond dongles_waiting qui check si 
-            - get_time() - dongle.last_use < config.dongle_cooldown
+Pour le sleep des dongles, faire un thread qui check en boucle tous les cooldown, des que un thread est plus en CD, je le signal grace a la cond qu'il aura dans sa struct.
+Ce qui debloquera les coders qui attende cela.
+Le plus opti: Faire un thread par dongle qui boucle que sur un seul dongle.
 
-sleep dongle:
-    - each dongle in a separate thread, routine just make them wake and sleep ?
-    - each coder check if now - dongle.last_compiled is >= required_sleep
-
-je creer un tthread du dongle qui va prendre le dongle et donc son mutex, le lock en gardant taken = 1 puis sleep.
-recreer et detruire ces thread a chaque fois nest pas opti 
-donc init au debut 
-
-faut faire une cond pour "reveiller" la routine du dongle et lendormir jimagine

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/10 16:09:23 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/12 13:31:11 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,19 @@ static void	lock_dongles(t_coder *coder)
 
 static int	acquire_dongles(t_coder *coder)
 {
-	// long	to_wait;
-
-
-	if (get_time() - coder->left_dongle->last_used < coder->config->dongle_cooldown)
+	while (get_time() - coder->left_dongle->last_used < coder->config->dongle_cooldown)
 	{
-		// printf("coder = %d | ", coder->id);
-		// printf("now - last_used = %ld\n", get_time() - coder->left_dongle->last_used);
-		usleep((get_time() - coder->left_dongle->last_used ) * 1000);
-		// pthread_cond_wait(coder->dongles_waiting, coder->left_dongle->dongle_mutex);
+		// usleep((get_time() - coder->left_dongle->last_used ) * 1000);
+		pthread_cond_wait(coder->dongles_waiting, coder->left_dongle->dongle_mutex);
 	}
 	pthread_mutex_lock(coder->output_mutex);
 	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 	pthread_mutex_unlock(coder->output_mutex);
 	coder->left_dongle->taken = 1;
-	if (get_time() - coder->left_dongle->last_used < coder->config->dongle_cooldown)
+	while (get_time() - coder->left_dongle->last_used < coder->config->dongle_cooldown)
 	{	
-		// printf("coder = %d | ", coder->id);
-		// printf("now - last_used = %ld\n", get_time() - coder->right_dongle->last_used);
-		// pthread_cond_wait(coder->dongles_waiting, coder->right_dongle->dongle_mutex);
-		usleep((get_time() - coder->left_dongle->last_used ) * 1000);
+		pthread_cond_wait(coder->dongles_waiting, coder->right_dongle->dongle_mutex);
+		// usleep((get_time() - coder->left_dongle->last_used ) * 1000);
 	}
 	pthread_mutex_lock(coder->output_mutex);
 	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
@@ -75,6 +68,7 @@ int	compile(t_coder *coder)
 	coder->right_dongle->last_used = get_time();
 	pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
 	pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
+	// pthread_cond_broadcast()
 	return (0);
 }
 
