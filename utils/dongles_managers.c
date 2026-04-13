@@ -20,6 +20,7 @@ void	*dongle_manager_routine(void *data)
 
     // MUTEX SUR ON_CD ? 
 	manager = (t_dongle_manager *)data;
+	// pthread_mutex_lock(manager->dongle->dongle_mutex);
 	while (1)
 	{
 		if (manager->dongle->on_cd && get_time()
@@ -32,6 +33,7 @@ void	*dongle_manager_routine(void *data)
 			pthread_cond_broadcast(manager->dongle->cd_cond);
 		}
 	}
+	// pthread_mutex_unlock(manager->dongle->dongle_mutex);
 	return (NULL);
 }
 
