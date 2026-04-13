@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/13 16:18:32 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/13 16:26:52 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	acquire_dongles(t_coder *coder)
 	{
 		// printf("\n\n waiting \n\n");
 		// usleep((get_time() - coder->left_dongle->available_at ) * 1000);
-		printf("iciii\n\n");
+		// printf("iciii\n\n");
 		target = get_interval(coder->left_dongle);
 		pthread_cond_timedwait(coder->left_dongle->cd_cond, coder->left_dongle->dongle_mutex, &target);
 		// pthread_cond_wait(coder->left_dongle->cd_cond, coder->left_dongle->dongle_mutex);
@@ -67,7 +67,7 @@ static int	acquire_dongles(t_coder *coder)
 		// printf("\n\n waiting \n\n");
 		// pthread_cond_wait(coder->right_dongle->cd_cond, coder->right_dongle->dongle_mutex);
 		// usleep((get_time() - coder->right_dongle->available_at ) * 1000);
-		printf("iciii\n\n");
+		// printf("iciii\n\n");
 		target = get_interval(coder->right_dongle);
 		pthread_cond_timedwait(coder->right_dongle->cd_cond, coder->right_dongle->dongle_mutex, &target);
 	}
