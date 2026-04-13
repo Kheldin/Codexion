@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/12 18:30:27 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/13 10:53:51 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,19 @@ static void	lock_dongles(t_coder *coder)
 	}
 	pthread_mutex_lock(coder->left_dongle->dongle_mutex);
 	pthread_mutex_lock(coder->right_dongle->dongle_mutex);
+	return;
+}
+
+static void	lock_on_cd(t_coder *coder)
+{
+	if (coder->right_dongle->id < coder->left_dongle->id)
+	{
+		pthread_mutex_lock(coder->right_dongle->on_cd_mutex);
+		pthread_mutex_lock(coder->left_dongle->on_cd_mutex);
+		return;
+	}
+	pthread_mutex_lock(coder->left_dongle->on_cd_mutex);
+	pthread_mutex_lock(coder->right_dongle->on_cd_mutex);
 	return;
 }
 
@@ -67,8 +80,11 @@ int	compile(t_coder *coder)
 	coder->right_dongle->taken = 0;
 	coder->left_dongle->last_used = get_time();
 	coder->right_dongle->last_used = get_time();
+	lock_on_cd(coder);
 	coder->left_dongle->on_cd = 1;
 	coder->right_dongle->on_cd = 1;
+	pthread_mutex_unlock(coder->left_dongle->on_cd_mutex);
+	pthread_mutex_unlock(coder->right_dongle->on_cd_mutex);
 	pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
 	pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
 	// pthread_cond_broadcast()

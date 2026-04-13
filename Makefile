@@ -41,11 +41,11 @@ re: fclean all
 
 debug: all
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	valgrind --trace-children=yes --track-fds=yes --tool=helgrind ./$(NAME) 8 500 200 150 100 5 1 str
+	valgrind --trace-children=yes --track-fds=yes --tool=helgrind ./$(NAME) 3 500 200 150 100 5 1 str
 
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	gdb --args ./$(NAME) $(ARG) 8 500 300 200 300 5 7 str
+	gdb --args ./$(NAME) $(ARG) 3 500 200 150 100 5 1 str
 
 
 .PHONY: all clean fclean re debug gdb_debug
