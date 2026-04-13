@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/12 18:43:22 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/13 10:50:18 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,16 @@ t_config	*init_config(char **av)
 static void	set_dongle_mutex(t_dongle *dongle)
 {
 	pthread_mutex_t	*dongle_mutex;
+	pthread_mutex_t	*on_cd_mutex;
 
 	dongle_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
-	if (!dongle_mutex)
+	on_cd_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
+	if (!dongle_mutex || !on_cd_mutex)
 		return;
 	pthread_mutex_init(dongle_mutex, NULL);
+	pthread_mutex_init(on_cd_mutex, NULL);
 	dongle->dongle_mutex = dongle_mutex;
+	dongle->on_cd_mutex = on_cd_mutex;
 }
 
 static void	set_dongle_cond(t_dongle *dongle)

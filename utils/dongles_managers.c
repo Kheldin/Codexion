@@ -26,7 +26,9 @@ void	*dongle_manager_routine(void *data)
 			- manager->dongle->last_used >= manager->dongle_cooldown)
 		{
             // printf("dongle %d on cd\n\n", manager->dongle->id);
+			pthread_mutex_lock(manager->dongle->on_cd_mutex);
 			manager->dongle->on_cd = 0;
+			pthread_mutex_unlock(manager->dongle->on_cd_mutex);
 			pthread_cond_broadcast(manager->dongle->cd_cond);
 		}
 	}

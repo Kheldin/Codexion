@@ -41,7 +41,7 @@ re: fclean all
 
 debug: all
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	valgrind --trace-children=yes --track-fds=yes --tool=helgrind -s ./$(NAME) 8 500 200 150 100 5 1 str
+	valgrind --trace-children=yes --track-fds=yes --tool=helgrind ./$(NAME) 8 500 200 150 100 5 1 str
 
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)

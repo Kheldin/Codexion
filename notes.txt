@@ -18,7 +18,6 @@ pb:
         ou alors faut juste attendre que les deux dongles soit libre avant de lock le premier
 
 
-Pour le sleep des dongles, faire un thread qui check en boucle tous les cooldown, des que un thread est plus en CD, je le signal grace a la cond qu'il aura dans sa struct.
+Pour le sleep des dongles, faire un thread par dongle qui check en boucle le cooldown, des que un thread est plus en CD, je le signal grace a la cond qu'il aura dans sa struct.
 Ce qui debloquera les coders qui attende cela.
-Le plus opti: Faire un thread par dongle qui boucle que sur un seul dongle.
 

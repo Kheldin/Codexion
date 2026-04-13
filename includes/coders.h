@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/12 18:46:06 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/13 10:47:17 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct s_dongle
 	long			last_used;
 	int				on_cd;
 	pthread_mutex_t	*dongle_mutex;
+	pthread_mutex_t	*on_cd_mutex;
 	pthread_cond_t	*cd_cond;
 }					t_dongle;
 
