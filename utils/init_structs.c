@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/13 10:50:18 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/13 16:02:41 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ t_dongle	*init_dongles(t_config *config)
 	{
 		dongles[i].id = i;
 		dongles[i].taken = 0;
-		dongles[i].last_used = get_time() - config->dongle_cooldown;
+		dongles[i].available_at = get_time() - config->dongle_cooldown;
 		set_dongle_mutex(&dongles[i]);
 		set_dongle_cond(&dongles[i]);
 		dongles[i].on_cd = 0;

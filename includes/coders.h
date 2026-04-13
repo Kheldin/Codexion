@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/13 10:47:17 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/13 16:10:31 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ typedef struct s_dongle
 {
 	int				id;
 	int				taken;
-	long			last_used;
+	long			available_at;
 	int				on_cd;
 	pthread_mutex_t	*dongle_mutex;
 	pthread_mutex_t	*on_cd_mutex;
@@ -80,3 +80,4 @@ int	refactor(t_coder *coder);
 void	dongles_managers(t_dongle *dongles, int nb_dongles, int dongle_cooldown);
 
 void	print_lock(char *msg, pthread_mutex_t *output_mutex);
+struct timespec	get_interval(t_dongle *dongle);

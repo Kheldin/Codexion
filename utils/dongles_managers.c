@@ -24,7 +24,7 @@ void	*dongle_manager_routine(void *data)
 	while (1)
 	{
 		if (manager->dongle->on_cd && get_time()
-			- manager->dongle->last_used >= manager->dongle_cooldown)
+			- manager->dongle->available_at >= manager->dongle_cooldown)
 		{
             // printf("dongle %d on cd\n\n", manager->dongle->id);
 			pthread_mutex_lock(manager->dongle->on_cd_mutex);
