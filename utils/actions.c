@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/14 14:17:58 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/14 14:56:45 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,22 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-static void	lock_dongles(t_coder *coder)
+static void	lock_dongle(t_dongle *dongle, t_coder *coder)
 {
-	if (coder->right_dongle->id > coder->left_dongle->id)
+	struct timespec target;
+
+	pthread_mutex_lock(dongle->dongle_mutex);
+	pthread_mutex_lock(dongle->on_cd_mutex);
+	while (get_time() < dongle->available_at)
 	{
-		pthread_mutex_lock(coder->right_dongle->dongle_mutex);
-		
-		pthread_mutex_lock(coder->left_dongle->dongle_mutex);
-		return;
+		target = get_interval();
+		pthread_cond_timedwait(dongle->cd_cond, dongle->on_cd_mutex, &target);
 	}
-	pthread_mutex_lock(coder->left_dongle->dongle_mutex);
-	pthread_mutex_lock(coder->right_dongle->dongle_mutex);
-	return;
+	pthread_mutex_unlock(dongle->on_cd_mutex);
+	pthread_mutex_lock(coder->output_mutex);
+	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
+	pthread_mutex_unlock(coder->output_mutex);
+	dongle->taken = 1;
 }
 
 /* 
@@ -42,65 +46,22 @@ static void	lock_dongles(t_coder *coder)
 */
 
 static int	acquire_dongles(t_coder *coder)
-{
-	struct timespec target;
-	
+{	
 	if (coder->left_dongle->id < coder->right_dongle->id)
 	{
-		pthread_mutex_lock(coder->right_dongle->on_cd_mutex);
-		while (get_time() < coder->right_dongle->available_at)
-		{
-			target = get_interval();
-			pthread_cond_timedwait(coder->right_dongle->cd_cond, coder->right_dongle->on_cd_mutex, &target);
-		}
-		pthread_mutex_unlock(coder->right_dongle->on_cd_mutex);
-		pthread_mutex_lock(coder->output_mutex);
-		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
-		pthread_mutex_unlock(coder->output_mutex);
-		coder->left_dongle->taken = 1;
-		pthread_mutex_lock(coder->left_dongle->on_cd_mutex);
-		while (get_time() < coder->left_dongle->available_at)
-		{	
-			target = get_interval();
-			pthread_cond_timedwait(coder->left_dongle->cd_cond, coder->left_dongle->on_cd_mutex, &target);
-		}
-		pthread_mutex_unlock(coder->left_dongle->on_cd_mutex);
-		pthread_mutex_lock(coder->output_mutex);
-		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
-		pthread_mutex_unlock(coder->output_mutex);
-		coder->right_dongle->taken = 1;
+		lock_dongle(coder->right_dongle, coder);
+		lock_dongle(coder->left_dongle, coder);
 	}
 	else
 	{
-		pthread_mutex_lock(coder->left_dongle->on_cd_mutex);
-		while (get_time() < coder->left_dongle->available_at)
-		{
-			target = get_interval();
-			pthread_cond_timedwait(coder->left_dongle->cd_cond, coder->left_dongle->on_cd_mutex, &target);
-		}
-		pthread_mutex_unlock(coder->left_dongle->on_cd_mutex);
-		pthread_mutex_lock(coder->output_mutex);
-		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
-		pthread_mutex_unlock(coder->output_mutex);
-		coder->left_dongle->taken = 1;
-		pthread_mutex_lock(coder->right_dongle->on_cd_mutex);
-		while (get_time() < coder->right_dongle->available_at)
-		{	
-			target = get_interval();
-			pthread_cond_timedwait(coder->right_dongle->cd_cond, coder->right_dongle->on_cd_mutex, &target);
-		}
-		pthread_mutex_unlock(coder->right_dongle->on_cd_mutex);
-		pthread_mutex_lock(coder->output_mutex);
-		printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
-		pthread_mutex_unlock(coder->output_mutex);
-		coder->right_dongle->taken = 1;
+		lock_dongle(coder->left_dongle, coder);
+		lock_dongle(coder->right_dongle, coder);
 	}
 	return (0);
 }
 
 int	compile(t_coder *coder)
 {	
-	lock_dongles(coder);
 	acquire_dongles(coder);
 	pthread_mutex_lock(coder->output_mutex);
 	printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp, coder->id);
