@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/14 14:13:28 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/14 14:17:58 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int	acquire_dongles(t_coder *coder)
 		pthread_mutex_lock(coder->right_dongle->on_cd_mutex);
 		while (get_time() < coder->right_dongle->available_at)
 		{
-			target = get_interval(coder->right_dongle);
+			target = get_interval();
 			pthread_cond_timedwait(coder->right_dongle->cd_cond, coder->right_dongle->on_cd_mutex, &target);
 		}
 		pthread_mutex_unlock(coder->right_dongle->on_cd_mutex);
@@ -61,8 +61,7 @@ static int	acquire_dongles(t_coder *coder)
 		pthread_mutex_lock(coder->left_dongle->on_cd_mutex);
 		while (get_time() < coder->left_dongle->available_at)
 		{	
-			// usleep(100);
-			target = get_interval(coder->left_dongle);
+			target = get_interval();
 			pthread_cond_timedwait(coder->left_dongle->cd_cond, coder->left_dongle->on_cd_mutex, &target);
 		}
 		pthread_mutex_unlock(coder->left_dongle->on_cd_mutex);
@@ -76,8 +75,7 @@ static int	acquire_dongles(t_coder *coder)
 		pthread_mutex_lock(coder->left_dongle->on_cd_mutex);
 		while (get_time() < coder->left_dongle->available_at)
 		{
-			// usleep(100);
-			target = get_interval(coder->left_dongle);
+			target = get_interval();
 			pthread_cond_timedwait(coder->left_dongle->cd_cond, coder->left_dongle->on_cd_mutex, &target);
 		}
 		pthread_mutex_unlock(coder->left_dongle->on_cd_mutex);
@@ -88,8 +86,7 @@ static int	acquire_dongles(t_coder *coder)
 		pthread_mutex_lock(coder->right_dongle->on_cd_mutex);
 		while (get_time() < coder->right_dongle->available_at)
 		{	
-			// usleep(100);
-			target = get_interval(coder->right_dongle);
+			target = get_interval();
 			pthread_cond_timedwait(coder->right_dongle->cd_cond, coder->right_dongle->on_cd_mutex, &target);
 		}
 		pthread_mutex_unlock(coder->right_dongle->on_cd_mutex);

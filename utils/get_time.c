@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 15:39:36 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/14 13:58:52 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/14 14:19:54 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,12 @@ long	get_time(void)
 }
 #include <stdio.h>
 
-struct timespec	get_interval(t_dongle *dongle)
+struct timespec	get_interval()
 {
 	struct timespec timeToWait;
 
-	(void)dongle;
-	timeToWait.tv_sec = 1000 / 1000;
+	timeToWait.tv_sec = 1;
 	timeToWait.tv_nsec = 1000 * 1000000;
-	// printf("%ld, %ld %ld \n\n", timeToWait.tv_nsec, timeToWait.tv_sec, get_time());
 	if (timeToWait.tv_nsec >= 1000000000)
 	{
 		timeToWait.tv_sec /= 1000000000;
