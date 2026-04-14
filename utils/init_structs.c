@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/13 16:02:41 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/14 13:54:30 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,14 @@ static void	set_dongle_mutex(t_dongle *dongle)
 	pthread_mutex_t	*dongle_mutex;
 	pthread_mutex_t	*on_cd_mutex;
 
-	dongle_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
 	on_cd_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
+	dongle_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
 	if (!dongle_mutex || !on_cd_mutex)
 		return;
 	pthread_mutex_init(dongle_mutex, NULL);
 	pthread_mutex_init(on_cd_mutex, NULL);
-	dongle->dongle_mutex = dongle_mutex;
 	dongle->on_cd_mutex = on_cd_mutex;
+	dongle->dongle_mutex = dongle_mutex;
 }
 
 static void	set_dongle_cond(t_dongle *dongle)
@@ -118,10 +118,9 @@ t_dongle	*init_dongles(t_config *config)
 	{
 		dongles[i].id = i;
 		dongles[i].taken = 0;
-		dongles[i].available_at = get_time() - config->dongle_cooldown;
+		dongles[i].available_at = get_time();
 		set_dongle_mutex(&dongles[i]);
 		set_dongle_cond(&dongles[i]);
-		dongles[i].on_cd = 0;
 		i++;
 	}
 	return (dongles);
