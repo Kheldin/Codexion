@@ -8,7 +8,7 @@ INCDIR		:= includes
 BUILDDIR	:= build
 
 SRCFILES	:= main.c utils/ft_calloc.c utils/print_instructions.c utils/init_structs.c \
-			   utils/get_time.c utils/actions.c utils/dongles_managers.c utils/print_lock.c
+			   utils/get_time.c utils/actions.c utils/print_lock.c
 
 OBJS		:= $(addprefix $(BUILDDIR)/,$(SRCFILES:.c=.o))
 HEADERS		:= $(INCDIR)/coders.h
