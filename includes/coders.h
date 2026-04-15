@@ -6,12 +6,13 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/14 14:18:07 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:05:12 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <unistd.h>
+#include <stdio.h>
 
 typedef struct s_dongle
 {
@@ -54,6 +55,12 @@ typedef struct s_scheduler
 	char			*mode;
 }					t_schedule;
 
+typedef struct s_monitor
+{
+	t_config	*config;
+	t_coder		*coders;
+} t_monitor;
+
 void				*ft_calloc(size_t nmemb, size_t size);
 
 int					print_instructions(void);
@@ -72,3 +79,4 @@ int	refactor(t_coder *coder);
 
 void	print_lock(char *msg, pthread_mutex_t *output_mutex);
 struct timespec	get_interval(void);
+void	launch_monitor(t_coder *coders, t_config *config);

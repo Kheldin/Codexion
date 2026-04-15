@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/14 14:56:45 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/15 15:07:57 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	compile(t_coder *coder)
 	coder->right_dongle->taken = 0;
 	coder->left_dongle->available_at = get_time() + coder->config->dongle_cooldown;
 	coder->right_dongle->available_at = get_time() + coder->config->dongle_cooldown;
+	coder->last_compiled = get_time();
 	pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
 	pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
 	return (0);

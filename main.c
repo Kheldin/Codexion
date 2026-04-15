@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/14 13:44:33 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/15 16:08:30 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*coders_routine(void *data)
 
 	coder = (t_coder *)data;
 	if (coder->id % 2 == 1)
-		usleep(1000);
+		usleep(100000);
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
 		compile(coder);
@@ -50,9 +50,6 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 			return (NULL);
 		i++;
 	}
-	i = 0;
-	while (i < config->nb_coders)
-		pthread_join(coders_threads[i++], NULL);
 	return (coders_threads);
 }
 
@@ -62,6 +59,7 @@ int	main(int ac, char **av)
 	t_config	*config;
 	t_dongle	*dongles;
 	t_coder		*coders;
+	int			i;
 	// t_schedule	*schedule;
 
 	if (ac != 9)
@@ -72,6 +70,10 @@ int	main(int ac, char **av)
 	dongles = init_dongles(config);
 	coders = init_coders(config, dongles);
 	coders_threads = create_coders(config, coders);
+	launch_monitor(coders, config);
+	i = 0;
+	while (i < config->nb_coders)
+		pthread_join(coders_threads[i++], NULL);
 	if (!coders_threads)
 		return (0);
 	// schedule = init_scheduler(config, coders_threads, coders);

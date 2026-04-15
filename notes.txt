@@ -7,17 +7,4 @@ todo:
     - Free everything
 
 pb: 
-    - ./codexion 6 500 300 200 300 4 1000 str
-        - Dans ce cas, parfois, quand 1 et 3 compilemt, 5 ne fait rien alors qu'il pourrait compiler egalement
-        - Seulement PARFOIS, il compile souvent egalement.
-    - Je pense avoir un soucis au niveau des lock. Un dongle peut lock le dongle de droite par exemple et attendre que le gauche se libere.
-        ce qui bloque ducoup le coder a sa droite aussi alors que le coder a sa droite a lui peut etre choper son dongle de droite.
-        Donc perte de temps / pas opti. 
-
-        Peut etre que cest le role du scheduler de gerer ca. (Jvois pas comment faire avec seulement broadcast mais bon)
-        ou alors faut juste attendre que les deux dongles soit libre avant de lock le premier
-
-
-Pour le sleep des dongles, faire un thread par dongle qui check en boucle le cooldown, des que un thread est plus en CD, je le signal grace a la cond qu'il aura dans sa struct.
-Ce qui debloquera les coders qui attende cela.
 

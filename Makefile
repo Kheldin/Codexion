@@ -1,6 +1,7 @@
 NAME		:= codexion
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror  -pthread -fsanitize=thread -g3
+CFLAGS		:= -Wall -Wextra -Werror  -pthread 
+# -fsanitize=thread -g3
 
 SRCDIR		:= .
 DEPDIR		:= .deps
@@ -8,7 +9,7 @@ INCDIR		:= includes
 BUILDDIR	:= build
 
 SRCFILES	:= main.c utils/ft_calloc.c utils/print_instructions.c utils/init_structs.c \
-			   utils/get_time.c utils/actions.c utils/print_lock.c
+			   utils/get_time.c actions.c utils/print_lock.c monitor.c
 
 OBJS		:= $(addprefix $(BUILDDIR)/,$(SRCFILES:.c=.o))
 HEADERS		:= $(INCDIR)/coders.h
