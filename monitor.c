@@ -6,11 +6,17 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 14:21:10 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 14:33:20 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 14:47:28 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
+
+/* 
+The tread leak error from fsanitize occur cause i dont join the monitor 
+before exiting the program.
+I have to add the exit flag to the config and add it in the while (1)
+*/
 
 static void	*monitor_routine(void *data)
 {
@@ -29,6 +35,7 @@ static void	*monitor_routine(void *data)
 				pthread_mutex_lock(monitor->coders[i].output_mutex);
 				printf("%ld %d burned out\n", get_time() - monitor->config->begin_timestamp, monitor->coders[i].id);
 				pthread_mutex_unlock(monitor->coders[i].output_mutex);
+				pthread_mutex_unlock(monitor->coders[i].last_compiled_mutex);
 				return (NULL);
 			}
 			pthread_mutex_unlock(monitor->coders[i].last_compiled_mutex);
