@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/15 15:05:29 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 14:07:02 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 		coders[i].id = i + 1;
 		coders[i].config = config;
 		coders[i].nb_compile = 0;
-		coders[i].last_compiled = 0;
+		coders[i].last_compiled = get_time();
 		coders[i].output_mutex = output_mutex;
 		set_coders_dongles(&coders[i], dongles, i, config->nb_coders);
 		i++;

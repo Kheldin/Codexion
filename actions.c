@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/15 15:07:57 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 14:13:25 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,6 @@ static void	lock_dongle(t_dongle *dongle, t_coder *coder)
 	pthread_mutex_unlock(coder->output_mutex);
 	dongle->taken = 1;
 }
-
-/* 
-	refactoriser la partie du dessous avec celle du dessus
-	lock dongle mutex, 
-	choper le dongle
-	print
-	lock lautre 
-	choper le dongle 
-	print
-*/
 
 static int	acquire_dongles(t_coder *coder)
 {	

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 14:21:10 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/15 16:37:07 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 14:12:39 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	*monitor_routine(void *data)
 		i = 0;
 		while (i < monitor->config->nb_coders)
 		{
-			if (get_time() - monitor->coders[i].last_compiled > monitor->config->time_to_burnout)
+			if (get_time() > monitor->coders[i].last_compiled + monitor->config->time_to_burnout)
 			{
 				pthread_mutex_lock(monitor->coders[i].output_mutex);
 				printf("%ld %d burned out\n", get_time() - monitor->config->begin_timestamp, monitor->coders[i].id);
