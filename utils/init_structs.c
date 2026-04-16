@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 14:34:56 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 16:48:42 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,12 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 t_config	*init_config(char **av)
 {
 	static t_config	config;
+	pthread_mutex_t	*mutex;
 
+	mutex = ft_calloc(1, sizeof(pthread_mutex_t));
+	if (!mutex)
+		return (NULL);
+	pthread_mutex_init(mutex, NULL);
 	config.nb_coders = atoi(av[1]);
 	config.time_to_burnout = atoi(av[2]);
 	config.time_to_compile = atoi(av[3]);
@@ -89,6 +94,8 @@ t_config	*init_config(char **av)
 	config.nb_compile_required = atoi(av[6]);
 	config.dongle_cooldown = atoi(av[7]);
 	config.begin_timestamp = get_time();
+	config.exit = 0;
+	config.config_mutex = mutex;
 	return (&config);
 }
 

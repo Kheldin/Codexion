@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/15 16:08:30 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 16:44:23 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,29 @@
 void	*coders_routine(void *data)
 {
 	t_coder	*coder;
+	int	ret;
 
 	coder = (t_coder *)data;
 	if (coder->id % 2 == 1)
 		usleep(100000);
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
-		compile(coder);
-		debug(coder);
-		refactor(coder);
+		pthread_mutex_lock(coder->config->config_mutex);
+		if (coder->config->exit == 1)
+		{
+			pthread_mutex_unlock(coder->config->config_mutex);
+			return (NULL);
+		}
+		pthread_mutex_unlock(coder->config->config_mutex);
+		ret = compile(coder);
+		if (ret)
+			return (NULL);
+		ret = debug(coder);
+		if (ret)
+			return (NULL);
+		ret = refactor(coder);
+		if (ret)
+			return (NULL);
 		coder->nb_compile++;
 	}
 	return (NULL);
@@ -77,10 +91,10 @@ int	main(int ac, char **av)
 	if (!coders_threads)
 		return (0);
 	// schedule = init_scheduler(config, coders_threads, coders);
-	free(coders_threads);
-	// free(schedule);
-	free(dongles);
-	free(coders);
+	// free(coders_threads);
+	// // free(schedule);
+	// free(dongles);
+	// free(coders);
 	// Dont forget to destroy every cond and mutexes
 	return (0);
 }

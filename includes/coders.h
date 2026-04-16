@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 14:29:40 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 16:23:55 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef struct s_config
 	int				nb_compile_required;
 	int				dongle_cooldown;
 	long			begin_timestamp;
+	int				exit;
+	pthread_mutex_t *config_mutex;
 }					t_config;
 
 typedef struct s_coder
@@ -81,3 +83,6 @@ int	refactor(t_coder *coder);
 void	print_lock(char *msg, pthread_mutex_t *output_mutex);
 struct timespec	get_interval(void);
 void	launch_monitor(t_coder *coders, t_config *config);
+
+void    set_exit(t_config *config);
+int check_exit(t_config *config);

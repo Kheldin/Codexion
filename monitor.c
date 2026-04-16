@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 14:21:10 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 14:47:28 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 16:27:13 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	*monitor_routine(void *data)
 	int		i;
 
 	monitor = (t_monitor *)data;
-	while (1)
+	while (1 && check_exit(monitor->config) == 0)
 	{
 		i = 0;
 		while (i < monitor->config->nb_coders)
@@ -34,6 +34,7 @@ static void	*monitor_routine(void *data)
 			{
 				pthread_mutex_lock(monitor->coders[i].output_mutex);
 				printf("%ld %d burned out\n", get_time() - monitor->config->begin_timestamp, monitor->coders[i].id);
+				set_exit(monitor->config);
 				pthread_mutex_unlock(monitor->coders[i].output_mutex);
 				pthread_mutex_unlock(monitor->coders[i].last_compiled_mutex);
 				return (NULL);
@@ -42,6 +43,7 @@ static void	*monitor_routine(void *data)
 			i++;
 		}
 	}
+	return (NULL);
 }
 
 static t_monitor	*init_monitor(t_coder *coders, t_config *config)
