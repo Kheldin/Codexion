@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 14:07:02 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 14:34:56 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,18 @@ static void	set_coders_dongles(t_coder *coder, t_dongle *dongles, int pos,
 	}
 }
 
+static void	set_last_compiled_mutex(t_coder *coder)
+{
+	pthread_mutex_t	*mutex;
+
+	mutex = ft_calloc(1, sizeof(pthread_mutex_t));
+	if (!mutex)
+		return ;
+	if (pthread_mutex_init(mutex, NULL) != 0)
+		return ;
+	coder->last_compiled_mutex = mutex;
+}
+
 t_coder	*init_coders(t_config *config, t_dongle *dongles)
 {
 	int				i;
@@ -59,6 +71,7 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 		coders[i].last_compiled = get_time();
 		coders[i].output_mutex = output_mutex;
 		set_coders_dongles(&coders[i], dongles, i, config->nb_coders);
+		set_last_compiled_mutex(&coders[i]);
 		i++;
 	}
 	return (coders);

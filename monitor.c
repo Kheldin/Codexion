@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 14:21:10 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 14:12:39 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 14:33:20 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	*monitor_routine(void *data)
 		i = 0;
 		while (i < monitor->config->nb_coders)
 		{
+			pthread_mutex_lock(monitor->coders[i].last_compiled_mutex);
 			if (get_time() > monitor->coders[i].last_compiled + monitor->config->time_to_burnout)
 			{
 				pthread_mutex_lock(monitor->coders[i].output_mutex);
@@ -30,6 +31,7 @@ static void	*monitor_routine(void *data)
 				pthread_mutex_unlock(monitor->coders[i].output_mutex);
 				return (NULL);
 			}
+			pthread_mutex_unlock(monitor->coders[i].last_compiled_mutex);
 			i++;
 		}
 	}
