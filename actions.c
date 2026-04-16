@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 17:59:00 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/16 18:04:27 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-static void	lock_dongle(t_dongle *dongle, t_coder *coder)
+static void	lock_dongle(t_dongle *dongle)
 {
 	struct timespec target;
 
@@ -29,9 +29,6 @@ static void	lock_dongle(t_dongle *dongle, t_coder *coder)
 		pthread_cond_timedwait(dongle->cd_cond, dongle->on_cd_mutex, &target);
 	}
 	pthread_mutex_unlock(dongle->on_cd_mutex);
-	pthread_mutex_lock(coder->output_mutex);
-	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
-	pthread_mutex_unlock(coder->output_mutex);
 	dongle->taken = 1;
 }
 
@@ -39,13 +36,13 @@ static int	acquire_dongles(t_coder *coder)
 {	
 	if (coder->left_dongle->id < coder->right_dongle->id)
 	{
-		lock_dongle(coder->right_dongle, coder);
-		lock_dongle(coder->left_dongle, coder);
+		lock_dongle(coder->right_dongle);
+		lock_dongle(coder->left_dongle);
 	}
 	else
 	{
-		lock_dongle(coder->left_dongle, coder);
-		lock_dongle(coder->right_dongle, coder);
+		lock_dongle(coder->left_dongle);
+		lock_dongle(coder->right_dongle);
 	}
 	return (0);
 }
@@ -60,6 +57,8 @@ int	compile(t_coder *coder)
 		return (1);
 	}
 	pthread_mutex_lock(coder->output_mutex);
+	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
+	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 	printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp, coder->id);
 	pthread_mutex_unlock(coder->output_mutex);
 	usleep(coder->config->time_to_compile * 1000);
