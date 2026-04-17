@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/17 11:45:47 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/17 14:19:00 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,14 @@ static int	acquire_dongles(t_coder *coder)
 int	compile(t_coder *coder)
 {
 	acquire_dongles(coder);
+	pthread_mutex_lock(coder->output_mutex);
 	if (check_exit(coder->config) == 1)
 	{
 		pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
 		pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
+		pthread_mutex_unlock(coder->output_mutex);
 		return (1);
 	}
-	pthread_mutex_lock(coder->output_mutex);
 	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 	printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp, coder->id);
@@ -78,9 +79,12 @@ int	compile(t_coder *coder)
 
 int	debug(t_coder *coder)
 {
-	if (check_exit(coder->config))
-		return (1);
 	pthread_mutex_lock(coder->output_mutex);
+	if (check_exit(coder->config))
+	{
+		pthread_mutex_unlock(coder->output_mutex);
+		return (1);
+	}
 	printf("%ld %d is debugging\n", get_time() - coder->config->begin_timestamp, coder->id);
 	pthread_mutex_unlock(coder->output_mutex);
 	usleep(coder->config->time_to_debug * 1000);
@@ -89,9 +93,12 @@ int	debug(t_coder *coder)
 
 int	refactor(t_coder *coder)
 {
-	if (check_exit(coder->config))
-		return (1);
 	pthread_mutex_lock(coder->output_mutex);
+	if (check_exit(coder->config))
+	{
+		pthread_mutex_unlock(coder->output_mutex);
+		return (1);
+	}	
 	printf("%ld %d is refactoring\n", get_time() - coder->config->begin_timestamp, coder->id);
 	pthread_mutex_unlock(coder->output_mutex);
 	usleep(coder->config->time_to_refactor * 1000);
