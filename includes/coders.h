@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 16:23:55 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/17 16:58:37 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,13 @@ typedef struct s_monitor
 	t_config	*config;
 	t_coder		*coders;
 } t_monitor;
+
+typedef struct	s_queue
+{
+	t_coder	*data;
+	void	*next;
+} t_queue;
+
 
 void				*ft_calloc(size_t nmemb, size_t size);
 
