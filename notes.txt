@@ -1,10 +1,6 @@
 todo:
-    - Make the dongle sleep after being used
-    - Add the burnout system
-    - monitor in a separate thread to keep track of burnout
     - Scheduler with fifo/edf
     - Destroy every mutex and dongle at the end
     - Free everything
 
 pb: 
-

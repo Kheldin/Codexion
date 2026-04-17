@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/17 14:19:00 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/17 23:42:32 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ int	compile(t_coder *coder)
 	printf("%ld %d has taken a dongle\n", get_time() - coder->config->begin_timestamp, coder->id);
 	printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp, coder->id);
 	pthread_mutex_unlock(coder->output_mutex);
+	pthread_mutex_lock(coder->last_compiled_mutex);
+	coder->last_compiled = get_time();
+	pthread_mutex_unlock(coder->last_compiled_mutex);
 	usleep(coder->config->time_to_compile * 1000);
 	coder->left_dongle->taken = 0;
 	coder->right_dongle->taken = 0;
@@ -71,9 +74,6 @@ int	compile(t_coder *coder)
 	coder->right_dongle->available_at = get_time() + coder->config->dongle_cooldown;
 	pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
 	pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
-	pthread_mutex_lock(coder->last_compiled_mutex);
-	coder->last_compiled = get_time();
-	pthread_mutex_unlock(coder->last_compiled_mutex);
 	return (0);
 }
 

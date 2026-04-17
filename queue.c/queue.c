@@ -6,13 +6,11 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/17 16:58:56 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/17 21:53:12 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
-
-
 
 int	ft_queuesize(t_queue *queue)
 {

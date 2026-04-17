@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/17 21:43:31 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/17 23:25:31 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*coders_routine(void *data)
 
 	coder = (t_coder *)data;
 	if (coder->id % 2 == 0)
-		usleep(500);
+		usleep(1000);
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
 		// pthread_mutex_lock(coder->config->config_mutex);
