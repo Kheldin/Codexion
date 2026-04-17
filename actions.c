@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 18:04:27 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/17 11:45:47 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ static int	acquire_dongles(t_coder *coder)
 		lock_dongle(coder->left_dongle);
 		lock_dongle(coder->right_dongle);
 	}
+	coder->left_dongle->taken = 1;
+	coder->right_dongle->taken = 1;
 	return (0);
 }
 
