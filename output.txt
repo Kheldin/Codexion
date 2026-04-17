@@ -1,1 +1,5 @@
-1 1 burned out
+0 1 has taken a dongle
+0 1 has taken a dongle
+0 1 is compiling
+101 1 is debugging
+201 2 burned out
