@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/17 16:58:37 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/18 10:14:03 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_coder
 	int				nb_compile;
 	pthread_mutex_t	*output_mutex;
 	pthread_mutex_t	*last_compiled_mutex;
+	pthread_cond_t	*top_prio;
 }					t_coder;
 
 typedef struct s_scheduler

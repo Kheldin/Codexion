@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/16 16:48:42 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/18 12:50:00 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,14 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 	int				i;
 	t_coder			*coders;
 	pthread_mutex_t	*output_mutex;
+	pthread_cond_t	*top_prio;
 
 	output_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
+	top_prio = ft_calloc(1, sizeof(pthread_cond_t));
+	if (!output_mutex || !top_prio)
+		return (NULL);
 	pthread_mutex_init(output_mutex, NULL);
+	pthread_cond_init(top_prio, NULL);
 	coders = ft_calloc(config->nb_coders, sizeof(t_coder));
 	if (!coders)
 		return (NULL);
@@ -70,6 +75,7 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 		coders[i].nb_compile = 0;
 		coders[i].last_compiled = get_time();
 		coders[i].output_mutex = output_mutex;
+		coders[i].top_prio = top_prio;
 		set_coders_dongles(&coders[i], dongles, i, config->nb_coders);
 		set_last_compiled_mutex(&coders[i]);
 		i++;
