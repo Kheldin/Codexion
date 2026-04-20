@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/20 18:29:26 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:38:59 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,13 @@ t_node	*queue_push_front(t_node **queue, t_node *new)
 	return (new);
 }
 
-int	is_top_prio(t_coder *coder, t_node **queue)
+int	is_top_prio(t_coder *coder)
 {
+	int	top_coder;
+
 	pthread_mutex_lock(coder->mutex_queue);
-	if ((*queue)->coder == coder)
+	top_coder = (*(coder->config->queue))->coder->id;
+	if (top_coder == coder->id)
 	{
 		pthread_mutex_unlock(coder->mutex_queue);	
 		return (1);
