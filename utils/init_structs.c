@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/18 13:46:27 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:38:22 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	set_last_compiled_mutex(t_coder *coder)
 	coder->mutex_queue = mutex_queue;
 }
 
-t_coder	*init_coders(t_config *config, t_dongle *dongles, t_queue code)
+t_coder	*init_coders(t_config *config, t_dongle *dongles)
 {
 	int				i;
 	t_coder			*coders;
@@ -63,10 +63,12 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles, t_queue code)
 	pthread_cond_t	*top_prio;
 
 	output_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
+	mutex_queue = ft_calloc(1, sizeof(pthread_mutex_t));
 	top_prio = ft_calloc(1, sizeof(pthread_cond_t));
-	if (!output_mutex || !top_prio)
+	if (!output_mutex || !top_prio || !mutex_queue)
 		return (NULL);
 	pthread_mutex_init(output_mutex, NULL);
+	pthread_mutex_init(mutex_queue, NULL);
 	pthread_cond_init(top_prio, NULL);
 	coders = ft_calloc(config->nb_coders, sizeof(t_coder));
 	if (!coders)
@@ -79,6 +81,7 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles, t_queue code)
 		coders[i].nb_compile = 0;
 		coders[i].last_compiled = get_time();
 		coders[i].output_mutex = output_mutex;
+		coders[i].mutex_queue = mutex_queue;
 		coders[i].top_prio = top_prio;
 		set_coders_dongles(&coders[i], dongles, i, config->nb_coders);
 		set_last_compiled_mutex(&coders[i]);
@@ -156,16 +159,16 @@ t_dongle	*init_dongles(t_config *config)
 	return (dongles);
 }
 
-t_schedule	*init_scheduler(t_config *config, pthread_t *coders_thread,
-		t_coder *coders)
-{
-	t_schedule	*schedule;
+// t_schedule	*init_scheduler(t_config *config, pthread_t *coders_thread,
+// 		t_coder *coders)
+// {
+// 	t_schedule	*schedule;
 
-	schedule = ft_calloc(1, sizeof(t_schedule));
-	if (!schedule)
-		return (NULL);
-	schedule->config = config;
-	schedule->coders_threads = coders_thread;
-	schedule->coders = coders;
-	return (schedule);
-}
+// 	schedule = ft_calloc(1, sizeof(t_schedule));
+// 	if (!schedule)
+// 		return (NULL);
+// 	schedule->config = config;
+// 	schedule->coders_threads = coders_thread;
+// 	schedule->coders = coders;
+// 	return (schedule);
+// }

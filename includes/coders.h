@@ -6,99 +6,101 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/18 13:52:30 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:44:08 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
-#include <unistd.h>
 #include <stdio.h>
+#include <unistd.h>
+
+typedef struct s_node	t_node;
 
 typedef struct s_dongle
 {
-	int				id;
-	int				taken;
-	long			available_at;
-	pthread_mutex_t	*dongle_mutex;
-	pthread_mutex_t	*on_cd_mutex;
-	pthread_cond_t	*cd_cond;
-}					t_dongle;
+	int					id;
+	int					taken;
+	long				available_at;
+	pthread_mutex_t		*dongle_mutex;
+	pthread_mutex_t		*on_cd_mutex;
+	pthread_cond_t		*cd_cond;
+}						t_dongle;
 
 typedef struct s_config
 {
-	int				nb_coders;
-	int				time_to_burnout;
-	int				time_to_compile;
-	int				time_to_debug;
-	int				time_to_refactor;
-	int				nb_compile_required;
-	int				dongle_cooldown;
-	long			begin_timestamp;
-	int				exit;
-	pthread_mutex_t *config_mutex;
-}					t_config;
+	int					nb_coders;
+	int					time_to_burnout;
+	int					time_to_compile;
+	int					time_to_debug;
+	int					time_to_refactor;
+	int					nb_compile_required;
+	int					dongle_cooldown;
+	long				begin_timestamp;
+	int					exit;
+	pthread_mutex_t		*config_mutex;
+}						t_config;
 
 typedef struct s_coder
 {
-	t_config		*config;
-	t_dongle		*left_dongle;
-	t_dongle		*right_dongle;
-	int				id;
-	long			last_compiled;
-	int				nb_compile;
-	pthread_mutex_t	*output_mutex;
-	pthread_mutex_t	*last_compiled_mutex;
-	pthread_mutex_t	*mutex_queue;
-	pthread_cond_t	*top_prio;
-	t_queue			*queue;
-}					t_coder;
+	t_config			*config;
+	t_dongle			*left_dongle;
+	t_dongle			*right_dongle;
+	int					id;
+	long				last_compiled;
+	int					nb_compile;
+	pthread_mutex_t		*output_mutex;
+	pthread_mutex_t		*last_compiled_mutex;
+	pthread_mutex_t		*mutex_queue;
+	pthread_cond_t		*top_prio;
+	t_node				**queue;
+}						t_coder;
 
 typedef struct s_scheduler
 {
-	t_config		*config;
-	t_coder			*coders;
-	pthread_t		*coders_threads;
-	char			*mode;
-}					t_schedule;
+	t_config			*config;
+	t_coder				*coders;
+	pthread_t			*coders_threads;
+	char				*mode;
+}						t_schedule;
 
 typedef struct s_monitor
 {
-	t_config	*config;
-	t_coder		*coders;
-} t_monitor;
+	t_config			*config;
+	t_coder				*coders;
+}						t_monitor;
 
-typedef struct	s_queue
+typedef struct s_node
 {
-	t_coder	*data;
-	void	*next;
-} t_queue;
+	t_coder				*coder;
+	t_node				*next;
+}						t_node;
 
+void					*ft_calloc(size_t nmemb, size_t size);
 
-void				*ft_calloc(size_t nmemb, size_t size);
+int						print_instructions(void);
 
-int					print_instructions(void);
+t_coder					*init_coders(t_config *config, t_dongle *dongles);
+t_config				*init_config(char **av);
+t_dongle				*init_dongles(t_config *config);
+// t_schedule				*init_scheduler(t_config *config,
+// 							pthread_t *coders_thread, t_coder *coders);
 
-t_coder				*init_coders(t_config *config, t_dongle *dongles);
-t_config			*init_config(char **av);
-t_dongle			*init_dongles(t_config *config);
-t_schedule			*init_scheduler(t_config *config, pthread_t *coders_thread,
-						t_coder *coders);
+long					get_time(void);
 
-long				get_time(void);
+int						compile(t_coder *coder);
+int						debug(t_coder *coder);
+int						refactor(t_coder *coder);
 
-int	compile(t_coder *coder);
-int	debug(t_coder *coder);
-int	refactor(t_coder *coder);
+void					print_lock(char *msg, pthread_mutex_t *output_mutex);
+struct timespec			get_interval(void);
+void					launch_monitor(t_coder *coders, t_config *config);
 
-void	print_lock(char *msg, pthread_mutex_t *output_mutex);
-struct timespec	get_interval(void);
-void	launch_monitor(t_coder *coders, t_config *config);
+void					set_exit(t_config *config);
+int						check_exit(t_config *config);
 
-void    set_exit(t_config *config);
-int check_exit(t_config *config);
-
-int	ft_queuesize(t_queue *queue);
-t_queue	*ft_new_coder_node(void *data);
-void	enqueue(t_queue **lst, t_queue *new);
-int	is_top_prio(t_coder *coder, t_queue **queue);
-void	dequeue(t_queue **lst);
+int						ft_queuesize(t_node *queue);
+t_node					*ft_new_coder_node(t_coder *coder);
+void					queue_push_front(t_node **lst, t_node *new);
+int						is_top_prio(t_coder *coder, t_node **queue);
+void					dequeue(t_node **lst);
+void					init_queue(t_coder *coders, int nb_coders);

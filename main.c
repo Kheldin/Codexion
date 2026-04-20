@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/18 13:51:01 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/20 16:44:24 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,20 @@ void	*coders_routine(void *data)
 	coder = (t_coder *)data;
 	if (coder->id % 2 == 0)
 		usleep(1000);
-	enqueue(&coder->queue, ft_new_coder_node(coder));
+	// queue_push_front(coder->queue, ft_new_coder_node(coder));
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
-		// pthread_mutex_lock(coder->config->config_mutex);
-		// if (coder->config->exit == 1)
-		// {
-		// 	pthread_mutex_unlock(coder->config->config_mutex);
-		// 	return (NULL);
-		// }
-		// pthread_mutex_unlock(coder->config->config_mutex);
-		if (!is_top_prio(coder, &coder->queue))
-			pthread_cond_wait(coder->top_prio, coder->mutex_queue);
-		dequeue(coder->queue);
+		pthread_mutex_lock(coder->config->config_mutex);
+		if (coder->config->exit == 1)
+		{
+			pthread_mutex_unlock(coder->config->config_mutex);
+			return (NULL);
+		}
+		pthread_mutex_unlock(coder->config->config_mutex);
+		// if (!is_top_prio(coder, coder->queue))
+		// 	pthread_cond_wait(coder->top_prio, coder->mutex_queue);
+		// dequeue(coder->queue);
+		// pthread_cond_broadcast(coder->top_prio);
 		if (compile(coder) == 1)
 			return (NULL);
 		if(debug(coder) == 1)
@@ -69,12 +70,11 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 
 int	main(int ac, char **av)
 {
-	pthread_t	*coders_threads;
+	// pthread_t	*coders_threads;
 	t_config	*config;
 	t_dongle	*dongles;
 	t_coder		*coders;
-	int			i;
-	// t_schedule	*schedule;
+	// int			i;
 
 	if (ac != 9)
 		return (print_instructions());
@@ -83,18 +83,20 @@ int	main(int ac, char **av)
 		return (0);
 	dongles = init_dongles(config);
 	coders = init_coders(config, dongles);
-	coders_threads = create_coders(config, coders);
-	launch_monitor(coders, config);
-	i = 0;
-	while (i < config->nb_coders)
-		pthread_join(coders_threads[i++], NULL);
-	if (!coders_threads)
-		return (0);
-	// schedule = init_scheduler(config, coders_threads, coders);
+	// printf("cicjis");
+	init_queue(coders, config->nb_coders);
+	// coders_threads = create_coders(config, coders);
+	// launch_monitor(coders, config);
+	
+	// i = 0;
+	// while (i < config->nb_coders)
+	// 	pthread_join(coders_threads[i++], NULL);
+	// if (!coders_threads)
+	// 	return (0);
 	// free(coders_threads);
-	// // free(schedule);
 	// free(dongles);
 	// free(coders);
 	// Dont forget to destroy every cond and mutexes
+	
 	return (0);
 }
