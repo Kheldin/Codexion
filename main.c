@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/20 16:44:24 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:30:26 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	*coders_routine(void *data)
 	coder = (t_coder *)data;
 	if (coder->id % 2 == 0)
 		usleep(1000);
-	// queue_push_front(coder->queue, ft_new_coder_node(coder));
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
 		pthread_mutex_lock(coder->config->config_mutex);
@@ -34,16 +33,20 @@ void	*coders_routine(void *data)
 			return (NULL);
 		}
 		pthread_mutex_unlock(coder->config->config_mutex);
-		// if (!is_top_prio(coder, coder->queue))
-		// 	pthread_cond_wait(coder->top_prio, coder->mutex_queue);
-		// dequeue(coder->queue);
-		// pthread_cond_broadcast(coder->top_prio);
+		if (is_top_prio(coder, coder->config->queue) == 0)
+		{
+			printf("waiting\n");
+			pthread_cond_wait(coder->top_prio, coder->mutex_queue);
+		}
+		dequeue(coder->config->queue);
+		pthread_cond_broadcast(coder->top_prio);
 		if (compile(coder) == 1)
 			return (NULL);
 		if(debug(coder) == 1)
 			return (NULL);
 		if (refactor(coder) == 1)
 			return (NULL);
+		queue_push_front(coder->config->queue, ft_new_coder_node(coder));
 		coder->nb_compile++;
 	}
 	return (NULL);
@@ -70,11 +73,11 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 
 int	main(int ac, char **av)
 {
-	// pthread_t	*coders_threads;
+	pthread_t	*coders_threads;
 	t_config	*config;
 	t_dongle	*dongles;
 	t_coder		*coders;
-	// int			i;
+	int			i;
 
 	if (ac != 9)
 		return (print_instructions());
@@ -83,16 +86,14 @@ int	main(int ac, char **av)
 		return (0);
 	dongles = init_dongles(config);
 	coders = init_coders(config, dongles);
-	// printf("cicjis");
-	init_queue(coders, config->nb_coders);
-	// coders_threads = create_coders(config, coders);
-	// launch_monitor(coders, config);
-	
-	// i = 0;
-	// while (i < config->nb_coders)
-	// 	pthread_join(coders_threads[i++], NULL);
-	// if (!coders_threads)
-	// 	return (0);
+	init_queue(coders, config);
+	coders_threads = create_coders(config, coders);
+	launch_monitor(coders, config);
+	i = 0;
+	while (i < config->nb_coders)
+		pthread_join(coders_threads[i++], NULL);
+	if (!coders_threads)
+		return (0);
 	// free(coders_threads);
 	// free(dongles);
 	// free(coders);

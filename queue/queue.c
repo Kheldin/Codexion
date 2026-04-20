@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/20 16:45:31 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:29:26 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,12 @@ t_node	*ft_new_coder_node(t_coder *coder)
 	return (node);
 }
 
-void	queue_push_front(t_node **queue, t_node *new)
+t_node	*queue_push_front(t_node **queue, t_node *new)
 {
 	new->next = *queue;
 	*queue = new;
+	queue = &new;
+	return (new);
 }
 
 int	is_top_prio(t_coder *coder, t_node **queue)
@@ -64,23 +66,25 @@ void	dequeue(t_node **queue)
 	queue = &tmp;
 }
 
-void	init_queue(t_coder *coders, int nb_coders)
+void	init_queue(t_coder *coders, t_config *config)
 {
 	int	i;
 	t_node	*head;
 
 	i = 0;
-	while (i < nb_coders)
+	while (i < config->nb_coders)
 	{
 		if (i == 0)
-		{
 			head = ft_new_coder_node(&coders[i]);
-		}
 		else
-		{
-			queue_push_front(&head, ft_new_coder_node(&coders[i]));
-		}
-		coders[i].queue = &head;
+			head = queue_push_front(&head, ft_new_coder_node(&coders[i]));
 		i++;
 	}
+	config->queue = &head;
+	// i = 0;
+	// while (i < config->nb_coders)
+	// {
+	// 	printf("ici %d\n", head->coder->id);
+	// 	i++;
+	// }
 }

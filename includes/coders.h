@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/20 16:44:08 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/20 18:28:28 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_config
 	long				begin_timestamp;
 	int					exit;
 	pthread_mutex_t		*config_mutex;
+	t_node				**queue;
 }						t_config;
 
 typedef struct s_coder
@@ -52,7 +53,6 @@ typedef struct s_coder
 	pthread_mutex_t		*last_compiled_mutex;
 	pthread_mutex_t		*mutex_queue;
 	pthread_cond_t		*top_prio;
-	t_node				**queue;
 }						t_coder;
 
 typedef struct s_scheduler
@@ -100,7 +100,7 @@ int						check_exit(t_config *config);
 
 int						ft_queuesize(t_node *queue);
 t_node					*ft_new_coder_node(t_coder *coder);
-void					queue_push_front(t_node **lst, t_node *new);
+t_node	*queue_push_front(t_node **queue, t_node *new);
 int						is_top_prio(t_coder *coder, t_node **queue);
 void					dequeue(t_node **lst);
-void					init_queue(t_coder *coders, int nb_coders);
+void	init_queue(t_coder *coders, t_config *config);
