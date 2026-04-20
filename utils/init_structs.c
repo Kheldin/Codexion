@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/18 12:50:00 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/18 13:46:27 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,24 @@ static void	set_coders_dongles(t_coder *coder, t_dongle *dongles, int pos,
 static void	set_last_compiled_mutex(t_coder *coder)
 {
 	pthread_mutex_t	*mutex;
+	pthread_mutex_t	*mutex_queue;
 
 	mutex = ft_calloc(1, sizeof(pthread_mutex_t));
+	mutex_queue = ft_calloc(1, sizeof(pthread_mutex_t));
 	if (!mutex)
 		return ;
-	if (pthread_mutex_init(mutex, NULL) != 0)
+	if (pthread_mutex_init(mutex, NULL) != 0 || pthread_mutex_init(mutex_queue, NULL) != 0)
 		return ;
 	coder->last_compiled_mutex = mutex;
+	coder->mutex_queue = mutex_queue;
 }
 
-t_coder	*init_coders(t_config *config, t_dongle *dongles)
+t_coder	*init_coders(t_config *config, t_dongle *dongles, t_queue code)
 {
 	int				i;
 	t_coder			*coders;
 	pthread_mutex_t	*output_mutex;
+	pthread_mutex_t	*mutex_queue;
 	pthread_cond_t	*top_prio;
 
 	output_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
