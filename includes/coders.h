@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/21 09:41:56 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/21 11:41:15 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ typedef struct s_config
 	long				begin_timestamp;
 	int					exit;
 	pthread_mutex_t		*config_mutex;
+	pthread_mutex_t		*mutex_output;
+	pthread_mutex_t		*mutex_queue;
+	pthread_cond_t		*cond_top_prio;
 	t_node				*queue;
 }						t_config;
 
@@ -49,10 +52,7 @@ typedef struct s_coder
 	int					id;
 	long				last_compiled;
 	int					nb_compile;
-	pthread_mutex_t		*output_mutex;
 	pthread_mutex_t		*last_compiled_mutex;
-	pthread_mutex_t		*mutex_queue;
-	pthread_cond_t		*top_prio;
 }						t_coder;
 
 typedef struct s_scheduler
