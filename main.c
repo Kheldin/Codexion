@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/21 09:53:17 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/21 11:23:00 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*coders_routine(void *data)
 		usleep(1000);
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
-		t_node *top_node = coder->config->queue;
+		// t_node *top_node = coder->config->queue;
 		// printf("top node id before dequeue = %d\n", top_node->coder->id);
 		pthread_mutex_lock(coder->config->config_mutex);
 		if (coder->config->exit == 1)
@@ -36,21 +36,22 @@ void	*coders_routine(void *data)
 		}
 		pthread_mutex_unlock(coder->config->config_mutex);
 		pthread_mutex_lock(coder->mutex_queue);
-		if (is_top_prio(coder) == 0 && coder->config->exit == 0)
-		{
+		while (is_top_prio(coder) == 0 ) // && coder->config->exit == 0
 			pthread_cond_wait(coder->top_prio, coder->mutex_queue);
-		}
 		dequeue(&coder->config->queue);
-		top_node = coder->config->queue; 
-		// printf("top node id after dequeue = %d\n", top_node->coder->id);
+		pthread_mutex_unlock(coder->mutex_queue);
 		pthread_cond_broadcast(coder->top_prio);
+		// top_node = coder->config->queue; 
+		// printf("top node id after dequeue = %d\n", top_node->coder->id);
 		if (compile(coder) == 1)
 			return (NULL);
 		if(debug(coder) == 1)
 			return (NULL);
 		if (refactor(coder) == 1)
 			return (NULL);
+		pthread_mutex_lock(coder->mutex_queue);
 		queue_push_front(&coder->config->queue, ft_new_coder_node(coder));
+		pthread_mutex_unlock(coder->mutex_queue);
 		coder->nb_compile++;
 	}
 	return (NULL);

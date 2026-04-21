@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/21 09:44:25 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/21 11:15:02 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ t_node	*ft_new_coder_node(t_coder *coder)
 
 t_node	*queue_push_front(t_node **queue, t_node *new)
 {
+	t_node	*node;
+
+	node = *queue;
 	new->next = *queue;
 	*queue = new;
 	queue = &new;
@@ -48,21 +51,19 @@ int	is_top_prio(t_coder *coder)
 {
 	int	top_coder;
 
-	pthread_mutex_lock(coder->mutex_queue);
 	top_coder = coder->config->queue->coder->id;
-	if (top_coder == coder->id)
-	{
-		pthread_mutex_unlock(coder->mutex_queue);	
+	if (top_coder == coder->id)	
 		return (1);
-	}
-	pthread_mutex_unlock(coder->mutex_queue);
 	return (0);
 }
 void	dequeue(t_node **queue)
 {
-
+	t_node	*node;
+	
+	node = *queue; 
 	if (!queue)
 		return ;
+	
 	// printf("before dequeue in func %d\n", (*queue)->coder->id);
 	queue = &(*queue)->next;
 	// del(lst->content);
