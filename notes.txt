@@ -3,7 +3,3 @@ todo:
     - Destroy every mutex and dongle at the end
     - Free everything
 
-
-output mutex
-mutex mutex
-top prio cond
