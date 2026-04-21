@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/21 11:53:40 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/21 14:33:02 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	*coders_routine(void *data)
 		}
 		pthread_mutex_unlock(coder->config->config_mutex);
 		pthread_mutex_lock(coder->config->mutex_queue);
-		while (is_top_prio(coder) == 0 ) // && coder->config->exit == 0
+		while (is_top_prio(coder) == 0)
 		{
-			printf("%d\n", is_top_prio(coder));
+			// printf("%d\n", is_top_prio(coder));
 			// printf("coder %d waiting\n", coder->id);
 			pthread_cond_wait(coder->config->cond_top_prio, coder->config->mutex_queue);
 		}
