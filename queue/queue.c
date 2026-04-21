@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/21 09:39:50 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/21 09:44:25 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	is_top_prio(t_coder *coder)
 	int	top_coder;
 
 	pthread_mutex_lock(coder->mutex_queue);
-	top_coder = (*(coder->config->queue))->coder->id;
+	top_coder = coder->config->queue->coder->id;
 	if (top_coder == coder->id)
 	{
 		pthread_mutex_unlock(coder->mutex_queue);	
@@ -63,10 +63,10 @@ void	dequeue(t_node **queue)
 
 	if (!queue)
 		return ;
-	printf("before dequeue in func %d\n", (*queue)->coder->id);
+	// printf("before dequeue in func %d\n", (*queue)->coder->id);
 	queue = &(*queue)->next;
 	// del(lst->content);
-	printf("after dequeue in func %d\n", (*queue)->coder->id);
+	// printf("after dequeue in func %d\n", (*queue)->coder->id);
 }
 
 void	init_queue(t_coder *coders, t_config *config)
@@ -83,7 +83,7 @@ void	init_queue(t_coder *coders, t_config *config)
 			head = queue_push_front(&head, ft_new_coder_node(&coders[i]));
 		i++;
 	}
-	config->queue = &head;
+	config->queue = head;
 	// i = 0;
 	// while (head)
 	// {
