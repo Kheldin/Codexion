@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/21 11:15:02 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/21 11:57:27 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ void	dequeue(t_node **queue)
 	if (!queue)
 		return ;
 	
-	// printf("before dequeue in func %d\n", (*queue)->coder->id);
-	queue = &(*queue)->next;
+	// printf("before dequeue in func %d\n", node->coder->config->queue->coder->id);
+	node->coder->config->queue = node->next;
 	// del(lst->content);
-	// printf("after dequeue in func %d\n", (*queue)->coder->id);
+	// printf("after dequeue in func %d\n", node->coder->config->queue->coder->id);
 }
 
 void	init_queue(t_coder *coders, t_config *config)
