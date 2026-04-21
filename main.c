@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/20 18:34:27 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/21 09:31:17 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	*coders_routine(void *data)
 		usleep(1000);
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
+		t_node *top_node = *(coder->config->queue);
+		printf("top node id before dequeue = %d\n", top_node->coder->id);
 		pthread_mutex_lock(coder->config->config_mutex);
 		if (coder->config->exit == 1)
 		{
@@ -38,6 +40,8 @@ void	*coders_routine(void *data)
 			pthread_cond_wait(coder->top_prio, coder->mutex_queue);
 		}
 		dequeue(coder->config->queue);
+		top_node = *(coder->config->queue); 
+		printf("top node id after dequeue = %d\n", top_node->coder->id);
 		pthread_cond_broadcast(coder->top_prio);
 		if (compile(coder) == 1)
 			return (NULL);
