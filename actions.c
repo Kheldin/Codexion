@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 16:09:44 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 16:18:02 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	acquire_dongles(t_coder *coder)
 			coder->config->mutex_queue);
 	}
 	dequeue(&coder->config->queue);
-	pthread_cond_broadcast(coder->config->cond_top_prio);
+	
 	pthread_mutex_unlock(coder->config->mutex_queue);
 	if (coder->left_dongle->id < coder->right_dongle->id)
 	{
@@ -57,6 +57,7 @@ static int	acquire_dongles(t_coder *coder)
 	}
 	coder->left_dongle->taken = 1;
 	coder->right_dongle->taken = 1;
+	pthread_cond_broadcast(coder->config->cond_top_prio);
 	return (0);
 }
 
