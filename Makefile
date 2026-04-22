@@ -1,7 +1,6 @@
 NAME		:= codexion
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror  -pthread 
-# -fsanitize=thread -g3
+CFLAGS		:= -Wall -Wextra -Werror  -pthread -fsanitize=thread -g3
 
 SRCDIR		:= .
 DEPDIR		:= .deps
@@ -43,7 +42,7 @@ re: fclean all
 
 debug: all
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	valgrind --trace-children=yes --track-fds=yes --tool=helgrind -s ./$(NAME) 5 2000 200 150 100 6 100 str
+	valgrind --trace-children=yes --track-fds=yes --tool=helgrind -s ./$(NAME) 5 2000 20 15 10 6 1 str
 
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)

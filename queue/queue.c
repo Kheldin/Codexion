@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 11:32:59 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 11:43:49 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	is_top_prio(t_coder *coder)
 	int	top_coder;
 
 	top_coder = coder->config->queue->coder->id;
-	printf("top coder  = %d -------\n", top_coder);
+	// printf("top coder  = %d -------\n", top_coder);
 	if (top_coder == coder->id)	
 		return (1);
 	return (0);
