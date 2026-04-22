@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 14:54:37 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 15:52:49 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static void	lock_dongle(t_dongle *dongle)
 
 static int	acquire_dongles(t_coder *coder)
 {
-	ft_lstadd_back(&coder->config->queue, ft_new_coder_node(coder));
 	pthread_mutex_lock(coder->config->mutex_queue);
 	while (is_top_prio(coder) == 0)
 	{
@@ -42,8 +41,9 @@ static int	acquire_dongles(t_coder *coder)
 		pthread_cond_wait(coder->config->cond_top_prio,
 			coder->config->mutex_queue);
 	}
-	pthread_mutex_unlock(coder->config->mutex_queue);
+	dequeue(&coder->config->queue);
 	pthread_cond_broadcast(coder->config->cond_top_prio);
+	pthread_mutex_unlock(coder->config->mutex_queue);
 	if (coder->left_dongle->id < coder->right_dongle->id)
 	{
 		lock_dongle(coder->right_dongle);
@@ -54,7 +54,7 @@ static int	acquire_dongles(t_coder *coder)
 		lock_dongle(coder->left_dongle);
 		lock_dongle(coder->right_dongle);
 	}
-	dequeue(&coder->config->queue);
+	ft_lstadd_back(&coder->config->queue, ft_new_coder_node(coder));
 	coder->left_dongle->taken = 1;
 	coder->right_dongle->taken = 1;
 	return (0);

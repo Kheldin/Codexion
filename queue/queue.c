@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 14:54:41 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 15:57:42 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,29 +61,30 @@ void	ft_lstadd_back(t_node **lst, t_node *new)
 
 int	is_top_prio(t_coder *coder)
 {
-	int	top_coder;
-	t_node	*tmp;
+	t_coder	*top_coder;
+	// t_node	*tmp;
 
-	top_coder = coder->config->queue->coder->id;
-	printf("calling %d || top coder id = %d--------\n",coder->id, coder->config->queue->coder->id);
-	if (top_coder == coder->id)	
+	top_coder = coder->config->queue->coder;
+	// printf("calling %d || top coder id = %d--------\n",coder->id, coder->config->queue->coder->id);
+	if (top_coder->id == coder->id)	
 		return (1);
-	tmp = coder->config->queue->next;
-	while (tmp && tmp->coder->id != coder->id)
-	{
-		if (tmp->coder->right_dongle == coder->right_dongle || tmp->coder->right_dongle == coder->left_dongle)
-			return (0);
-		if (tmp->coder->left_dongle == coder->right_dongle || tmp->coder->left_dongle == coder->left_dongle)
-			return (0);
-		tmp = tmp->next;
-	}
+	// tmp = coder->config->queue->next;
+	// if (tmp && tmp->coder->id != coder->id)
+	// {
+	// 	if (tmp->coder->right_dongle == coder->left_dongle)
+	// 		return (0);
+	// 	if (tmp->coder->left_dongle == coder->right_dongle)
+	// 		return (0);
+	// 	tmp = tmp->next;
+	// }
+	if (top_coder->right_dongle == coder->left_dongle || top_coder->left_dongle == coder->right_dongle)
+		return (0);
 	return (1);
 }
 void	dequeue(t_node **queue)
 {
 	t_node	*node;
 	
-	pthread_mutex_lock((*queue)->coder->config->mutex_queue);
 	node = *queue; 
 	if (!queue)
 		return ;
@@ -92,13 +93,13 @@ void	dequeue(t_node **queue)
 	node->coder->config->queue = node->next;
 	// del(lst->content);
 	// printf("after dequeue in func %d\n", node->coder->config->queue->coder->id);
-	pthread_mutex_unlock((*queue)->coder->config->mutex_queue);
 }
 
 void	init_queue(t_coder *coders, t_config *config)
 {
 	int	i;
 	t_node	*head;
+	t_node	*tmp;
 
 	i = 0;
 	while (i < config->nb_coders)
