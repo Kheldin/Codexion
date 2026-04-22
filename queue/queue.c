@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 11:43:49 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 14:54:41 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static t_node	*ft_lstlast(t_node *lst)
 
 void	ft_lstadd_back(t_node **lst, t_node *new)
 {
+	pthread_mutex_lock(new->coder->config->mutex_queue);
 	if (!new)
 		return ;
 	if (!*lst)
@@ -55,22 +56,34 @@ void	ft_lstadd_back(t_node **lst, t_node *new)
 		return ;
 	}
 	ft_lstlast(*lst)->next = new;
+	pthread_mutex_unlock(new->coder->config->mutex_queue);
 }
 
 int	is_top_prio(t_coder *coder)
 {
 	int	top_coder;
+	t_node	*tmp;
 
 	top_coder = coder->config->queue->coder->id;
-	// printf("top coder  = %d -------\n", top_coder);
+	printf("calling %d || top coder id = %d--------\n",coder->id, coder->config->queue->coder->id);
 	if (top_coder == coder->id)	
 		return (1);
-	return (0);
+	tmp = coder->config->queue->next;
+	while (tmp && tmp->coder->id != coder->id)
+	{
+		if (tmp->coder->right_dongle == coder->right_dongle || tmp->coder->right_dongle == coder->left_dongle)
+			return (0);
+		if (tmp->coder->left_dongle == coder->right_dongle || tmp->coder->left_dongle == coder->left_dongle)
+			return (0);
+		tmp = tmp->next;
+	}
+	return (1);
 }
 void	dequeue(t_node **queue)
 {
 	t_node	*node;
 	
+	pthread_mutex_lock((*queue)->coder->config->mutex_queue);
 	node = *queue; 
 	if (!queue)
 		return ;
@@ -79,6 +92,7 @@ void	dequeue(t_node **queue)
 	node->coder->config->queue = node->next;
 	// del(lst->content);
 	// printf("after dequeue in func %d\n", node->coder->config->queue->coder->id);
+	pthread_mutex_unlock((*queue)->coder->config->mutex_queue);
 }
 
 void	init_queue(t_coder *coders, t_config *config)
