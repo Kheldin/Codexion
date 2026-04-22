@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 13:13:30 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 16:12:04 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	main(int ac, char **av)
 		return (0);
 	dongles = init_dongles(config);
 	coders = init_coders(config, dongles);
-	init_queue(coders, config);
+	// init_queue(coders, config);
 	coders_threads = create_coders(config, coders);
 	launch_monitor(coders, config);
 	i = 0;

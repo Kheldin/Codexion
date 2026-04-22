@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 15:57:42 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 16:13:16 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ static t_node	*ft_lstlast(t_node *lst)
 	return (lst);
 }
 
-void	ft_lstadd_back(t_node **lst, t_node *new)
+void	enqueue(t_node **lst, t_node *new)
 {
-	pthread_mutex_lock(new->coder->config->mutex_queue);
+	// pthread_mutex_lock(new->coder->config->mutex_queue);
 	if (!new)
 		return ;
 	if (!*lst)
@@ -56,7 +56,7 @@ void	ft_lstadd_back(t_node **lst, t_node *new)
 		return ;
 	}
 	ft_lstlast(*lst)->next = new;
-	pthread_mutex_unlock(new->coder->config->mutex_queue);
+	// pthread_mutex_unlock(new->coder->config->mutex_queue);
 }
 
 int	is_top_prio(t_coder *coder)
@@ -99,7 +99,6 @@ void	init_queue(t_coder *coders, t_config *config)
 {
 	int	i;
 	t_node	*head;
-	t_node	*tmp;
 
 	i = 0;
 	while (i < config->nb_coders)
@@ -107,7 +106,7 @@ void	init_queue(t_coder *coders, t_config *config)
 		if (i == 0)
 			head = ft_new_coder_node(&coders[i]);
 		else
-			ft_lstadd_back(&head, ft_new_coder_node(&coders[i]));
+			enqueue(&head, ft_new_coder_node(&coders[i]));
 		i++;
 	}
 	config->queue = head;

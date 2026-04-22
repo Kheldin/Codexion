@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 11:27:24 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 16:08:17 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int						check_exit(t_config *config);
 
 int						ft_queuesize(t_node *queue);
 t_node					*ft_new_coder_node(t_coder *coder);
-void					ft_lstadd_back(t_node **lst, t_node *new);
+void					enqueue(t_node **lst, t_node *new);
 int						is_top_prio(t_coder *coder);
 void					dequeue(t_node **lst);
 void					init_queue(t_coder *coders, t_config *config);

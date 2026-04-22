@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/21 11:45:31 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 16:11:03 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ t_config	*init_config(char **av)
 	config.cond_top_prio = cond_top_prio;
 	config.mutex_output = mutex_output;
 	config.mutex_queue = mutex_queue;
+	config.queue = NULL;
 	return (&config);
 }
 
