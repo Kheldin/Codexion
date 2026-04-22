@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/21 15:13:44 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/22 11:27:54 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ void	*coders_routine(void *data)
 		pthread_mutex_unlock(coder->config->mutex_queue);
 		if (compile(coder) == 1)
 			return (NULL);
+		ft_lstadd_back(&coder->config->queue, ft_new_coder_node(coder));
 		if(debug(coder) == 1)
 			return (NULL);
 		if (refactor(coder) == 1)
 			return (NULL);
 		pthread_mutex_lock(coder->config->mutex_queue);
-		queue_push_front(&coder->config->queue, ft_new_coder_node(coder));
 		pthread_mutex_unlock(coder->config->mutex_queue);
 		coder->nb_compile++;
 	}
