@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 16:22:42 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/24 10:27:12 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,24 +62,24 @@ void	enqueue(t_node **lst, t_node *new)
 int	is_top_prio(t_coder *coder)
 {
 	t_coder	*top_coder;
-	// t_node	*tmp;
+	t_node	*tmp;
 
 	top_coder = coder->config->queue->coder;
-	printf("calling %d || top coder id = %d--------\n",coder->id, coder->config->queue->coder->id);
+	// printf("calling %d || top coder id = %d--------\n",coder->id, coder->config->queue->coder->id);
 	if (top_coder->id == coder->id)	
 		return (1);
-	// tmp = coder->config->queue->next;
-	// if (tmp && tmp->coder->id != coder->id)
-	// {
-	// 	if (tmp->coder->right_dongle == coder->left_dongle)
-	// 		return (0);
-	// 	if (tmp->coder->left_dongle == coder->right_dongle)
-	// 		return (0);
-	// 	tmp = tmp->next;
-	// }
-	// if (top_coder->right_dongle == coder->left_dongle || top_coder->left_dongle == coder->right_dongle)
-	// 	return (0);
-	return (0);
+	tmp = coder->config->queue->next;
+	while (tmp && tmp->coder->id != coder->id)
+	{
+		if (tmp->coder->right_dongle == coder->left_dongle)
+			return (0);
+		if (tmp->coder->left_dongle == coder->right_dongle)
+			return (0);
+		if (top_coder->right_dongle == coder->left_dongle || top_coder->left_dongle == coder->right_dongle)
+			return (0);
+		tmp = tmp->next;
+	}
+	return (1);
 }
 void	dequeue(t_node **queue)
 {
