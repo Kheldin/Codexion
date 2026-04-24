@@ -1,8 +1,5 @@
 todo:
-    - Scheduler with fifo/edf
+    - edf
     - Destroy every mutex and dongle at the end
     - Free everything
-
-Broadcast au moment ou le coder lache les dongles.
-Dans top prio, 2 premier ne partage pas de dongle avec le 3e, alors je dois lancer le 3e
-Puis le push back
+    - exit le monitor proprement sans leak

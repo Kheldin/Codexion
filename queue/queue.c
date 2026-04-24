@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/24 10:27:12 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/24 14:19:18 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static t_node	*ft_lstlast(t_node *lst)
 
 void	enqueue(t_node **lst, t_node *new)
 {
-	// pthread_mutex_lock(new->coder->config->mutex_queue);
 	if (!new)
 		return ;
 	if (!*lst)
@@ -56,7 +55,6 @@ void	enqueue(t_node **lst, t_node *new)
 		return ;
 	}
 	ft_lstlast(*lst)->next = new;
-	// pthread_mutex_unlock(new->coder->config->mutex_queue);
 }
 
 int	is_top_prio(t_coder *coder)
@@ -65,8 +63,7 @@ int	is_top_prio(t_coder *coder)
 	t_node	*tmp;
 
 	top_coder = coder->config->queue->coder;
-	// printf("calling %d || top coder id = %d--------\n",coder->id, coder->config->queue->coder->id);
-	if (top_coder->id == coder->id)	
+	if (top_coder->id == coder->id)
 		return (1);
 	tmp = coder->config->queue->next;
 	while (tmp && tmp->coder->id != coder->id)
@@ -75,7 +72,8 @@ int	is_top_prio(t_coder *coder)
 			return (0);
 		if (tmp->coder->left_dongle == coder->right_dongle)
 			return (0);
-		if (top_coder->right_dongle == coder->left_dongle || top_coder->left_dongle == coder->right_dongle)
+		if (top_coder->right_dongle == coder->left_dongle
+			|| top_coder->left_dongle == coder->right_dongle)
 			return (0);
 		tmp = tmp->next;
 	}
@@ -84,21 +82,17 @@ int	is_top_prio(t_coder *coder)
 void	dequeue(t_node **queue)
 {
 	t_node	*node;
-	
-	node = *queue; 
+
+	node = *queue;
 	if (!queue)
 		return ;
-	
-	// printf("before dequeue in func %d\n", node->coder->config->queue->coder->id);
 	node->coder->config->queue = node->next;
-	// del(lst->content);
-	// printf("after dequeue in func %d\n", node->coder->config->queue->coder->id);
 }
 
 void	init_queue(t_coder *coders, t_config *config)
 {
-	int	i;
-	t_node	*head;
+	int i;
+	t_node *head;
 
 	i = 0;
 	while (i < config->nb_coders)

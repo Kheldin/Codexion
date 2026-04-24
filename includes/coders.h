@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 16:08:17 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/24 14:40:46 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,6 @@ typedef struct s_coder
 	pthread_mutex_t		*last_compiled_mutex;
 }						t_coder;
 
-typedef struct s_scheduler
-{
-	t_config			*config;
-	t_coder				*coders;
-	pthread_t			*coders_threads;
-	char				*mode;
-}						t_schedule;
-
 typedef struct s_monitor
 {
 	t_config			*config;
@@ -104,3 +96,5 @@ void					enqueue(t_node **lst, t_node *new);
 int						is_top_prio(t_coder *coder);
 void					dequeue(t_node **lst);
 void					init_queue(t_coder *coders, t_config *config);
+
+int    destroy_mutexes(t_config *config, t_coder *coders, t_dongle *dongles);

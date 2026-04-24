@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 16:16:00 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/24 15:45:25 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*coders_routine(void *data)
 
 	coder = (t_coder *)data;
 	if (coder->id % 2 == 0)
-		usleep(10000);
+		usleep(1000);
 	while (coder->nb_compile < coder->config->nb_compile_required)
 	{
 		pthread_mutex_lock(coder->config->config_mutex);
@@ -35,7 +35,7 @@ void	*coders_routine(void *data)
 		pthread_mutex_unlock(coder->config->config_mutex);
 		if (compile(coder) == 1)
 			return (NULL);
-		if(debug(coder) == 1)
+		if (debug(coder) == 1)
 			return (NULL);
 		if (refactor(coder) == 1)
 			return (NULL);
@@ -86,10 +86,7 @@ int	main(int ac, char **av)
 		pthread_join(coders_threads[i++], NULL);
 	if (!coders_threads)
 		return (0);
-	// free(coders_threads);
-	// free(dongles);
-	// free(coders);
-	// Dont forget to destroy every cond and mutexes
-	
+	destroy_mutexes(config, coders, dongles);
+	// free_everythings(coders_threads, coders, config, dongles);
 	return (0);
 }

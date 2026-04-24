@@ -1,7 +1,6 @@
 NAME		:= codexion
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror  -pthread 
-# -fsanitize=thread -g3
+CFLAGS		:= -Wall -Wextra -Werror  -pthread -fsanitize=thread -g3
 
 SRCDIR		:= .
 DEPDIR		:= .deps
@@ -10,7 +9,7 @@ BUILDDIR	:= build
 
 SRCFILES	:= main.c utils/ft_calloc.c utils/print_instructions.c utils/init_structs.c \
 			   utils/get_time.c actions.c utils/print_lock.c monitor.c utils/check_exit.c \
-			   queue/queue.c
+			   queue/queue.c utils/mutexes.c
 
 OBJS		:= $(addprefix $(BUILDDIR)/,$(SRCFILES:.c=.o))
 HEADERS		:= $(INCDIR)/coders.h
@@ -43,7 +42,7 @@ re: fclean all
 
 debug: all
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	valgrind --trace-children=yes --track-fds=yes --tool=helgrind -s ./$(NAME) 5 2000 20 15 10 6 1 str
+	valgrind --trace-children=yes --track-fds=yes --tool=helgrind -s ./$(NAME) 2 20000 20 15 10 6 10 str
 
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
