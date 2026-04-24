@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/24 10:31:53 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/24 11:36:30 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	acquire_dongles(t_coder *coder)
 {
 	pthread_mutex_lock(coder->config->mutex_queue);
 	enqueue(&coder->config->queue, ft_new_coder_node(coder));
-	while (is_top_prio(coder) == 0)
+	while (coder->config->exit == 0 && is_top_prio(coder) == 0)
 	{
 		// printf("return %d\n", is_top_prio(coder));
 		pthread_cond_wait(coder->config->cond_top_prio,
@@ -108,6 +108,7 @@ int	debug(t_coder *coder)
 		coder->id);
 	pthread_mutex_unlock(coder->config->mutex_output);
 	usleep(coder->config->time_to_debug * 1000);
+	pthread_cond_broadcast(coder->config->cond_top_prio);
 	return (0);
 }
 
@@ -123,5 +124,6 @@ int	refactor(t_coder *coder)
 		- coder->config->begin_timestamp, coder->id);
 	pthread_mutex_unlock(coder->config->mutex_output);
 	usleep(coder->config->time_to_refactor * 1000);
+	pthread_cond_broadcast(coder->config->cond_top_prio);
 	return (0);
 }
