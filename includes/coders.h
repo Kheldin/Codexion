@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/24 14:40:46 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/24 16:55:02 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@ typedef struct s_config
 	int					dongle_cooldown;
 	long				begin_timestamp;
 	int					exit;
+	int					total_compilations;
 	pthread_mutex_t		*config_mutex;
 	pthread_mutex_t		*mutex_output;
 	pthread_mutex_t		*mutex_queue;
+	pthread_mutex_t		*mutex_total_comp;
 	pthread_cond_t		*cond_top_prio;
 	t_node				*queue;
 }						t_config;
@@ -85,10 +87,11 @@ int						refactor(t_coder *coder);
 
 void					print_lock(char *msg, pthread_mutex_t *output_mutex);
 struct timespec			get_interval(void);
-void					launch_monitor(t_coder *coders, t_config *config);
+pthread_t				*launch_monitor(t_coder *coders, t_config *config);
 
 void					set_exit(t_config *config);
 int						check_exit(t_config *config);
+int						total_comp_reached(t_config *config);
 
 int						ft_queuesize(t_node *queue);
 t_node					*ft_new_coder_node(t_coder *coder);
@@ -97,4 +100,5 @@ int						is_top_prio(t_coder *coder);
 void					dequeue(t_node **lst);
 void					init_queue(t_coder *coders, t_config *config);
 
-int    destroy_mutexes(t_config *config, t_coder *coders, t_dongle *dongles);
+int						destroy_mutexes(t_config *config, t_coder *coders,
+							t_dongle *dongles);

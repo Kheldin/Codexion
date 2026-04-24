@@ -3,3 +3,4 @@ todo:
     - Destroy every mutex and dongle at the end
     - Free everything
     - exit le monitor proprement sans leak
+    - Soit mutex pour nb total

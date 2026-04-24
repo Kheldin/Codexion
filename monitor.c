@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 14:21:10 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/21 14:22:49 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/24 16:56:38 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ static void	*monitor_routine(void *data)
 	t_monitor	*monitor;
 	int		i;
 
+
 	monitor = (t_monitor *)data;
-	while (1 && check_exit(monitor->config) == 0)
+	while (1 && check_exit(monitor->config) == 0 && !total_comp_reached(monitor->config))
 	{
 		i = 0;
 		while (i < monitor->config->nb_coders)
@@ -58,7 +59,7 @@ static t_monitor	*init_monitor(t_coder *coders, t_config *config)
 	return (monitor);
 }
 
-void	launch_monitor(t_coder *coders, t_config *config)
+pthread_t	*launch_monitor(t_coder *coders, t_config *config)
 {
 	pthread_t *monitor_thread;
 	t_monitor	*monitor;
@@ -66,6 +67,7 @@ void	launch_monitor(t_coder *coders, t_config *config)
 	monitor = init_monitor(coders, config);
 	monitor_thread = ft_calloc(1, sizeof(pthread_t));
 	if (!monitor_thread || !monitor)
-		return ;
+		return (NULL);
 	pthread_create(monitor_thread, NULL, monitor_routine, monitor);
+	return (monitor_thread);
 }

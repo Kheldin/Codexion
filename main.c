@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/24 15:45:25 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/24 16:56:06 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ void	*coders_routine(void *data)
 		if (refactor(coder) == 1)
 			return (NULL);
 		coder->nb_compile++;
+		pthread_mutex_lock(coder->config->mutex_total_comp);
+		coder->config->total_compilations += 1;
+		pthread_mutex_unlock(coder->config->mutex_total_comp);
 	}
 	return (NULL);
 }
@@ -69,6 +72,7 @@ int	main(int ac, char **av)
 	t_config	*config;
 	t_dongle	*dongles;
 	t_coder		*coders;
+	pthread_t	*monitor;
 	int			i;
 
 	if (ac != 9)
@@ -80,13 +84,14 @@ int	main(int ac, char **av)
 	coders = init_coders(config, dongles);
 	// init_queue(coders, config);
 	coders_threads = create_coders(config, coders);
-	launch_monitor(coders, config);
+	monitor = launch_monitor(coders, config);
 	i = 0;
 	while (i < config->nb_coders)
 		pthread_join(coders_threads[i++], NULL);
+	pthread_join(*monitor, NULL);
 	if (!coders_threads)
 		return (0);
-	destroy_mutexes(config, coders, dongles);
+	// destroy_mutexes(config, coders, dongles);
 	// free_everythings(coders_threads, coders, config, dongles);
 	return (0);
 }

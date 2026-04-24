@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/22 16:11:03 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/24 16:52:29 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,20 @@ t_config	*init_config(char **av)
 	pthread_mutex_t	*mutex;
 	pthread_mutex_t	*mutex_queue;
 	pthread_mutex_t	*mutex_output;
+	pthread_mutex_t	*mutex_total_comp;
 	pthread_cond_t	*cond_top_prio;
 
 	mutex = ft_calloc(1, sizeof(pthread_mutex_t));
 	mutex_queue = ft_calloc(1, sizeof(pthread_mutex_t));
 	mutex_output = ft_calloc(1, sizeof(pthread_mutex_t));
+	mutex_total_comp = ft_calloc(1, sizeof(pthread_mutex_t));
 	cond_top_prio = ft_calloc(1, sizeof(pthread_cond_t));
-	if (!mutex || !mutex_output || !mutex_queue || !cond_top_prio)
+	if (!mutex || !mutex_output || !mutex_queue || !cond_top_prio || !mutex_total_comp)
 		return (NULL);
 	pthread_mutex_init(mutex, NULL);
 	pthread_mutex_init(mutex_queue, NULL);
 	pthread_mutex_init(mutex_output, NULL);
+	pthread_mutex_init(mutex_total_comp, NULL);
 	pthread_cond_init(cond_top_prio, NULL);
 	config.nb_coders = atoi(av[1]);
 	config.time_to_burnout = atoi(av[2]);
@@ -105,6 +108,8 @@ t_config	*init_config(char **av)
 	config.mutex_output = mutex_output;
 	config.mutex_queue = mutex_queue;
 	config.queue = NULL;
+	config.total_compilations = 0;
+	config.mutex_total_comp = mutex_total_comp;
 	return (&config);
 }
 
