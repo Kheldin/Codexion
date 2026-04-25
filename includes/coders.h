@@ -6,13 +6,15 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/24 16:55:02 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/25 11:56:10 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+
 
 typedef struct s_node	t_node;
 
@@ -76,8 +78,7 @@ int						print_instructions(void);
 t_coder					*init_coders(t_config *config, t_dongle *dongles);
 t_config				*init_config(char **av);
 t_dongle				*init_dongles(t_config *config);
-// t_schedule				*init_scheduler(t_config *config,
-// 							pthread_t *coders_thread, t_coder *coders);
+
 
 long					get_time(void);
 
@@ -100,5 +101,5 @@ int						is_top_prio(t_coder *coder);
 void					dequeue(t_node **lst);
 void					init_queue(t_coder *coders, t_config *config);
 
-int						destroy_mutexes(t_config *config, t_coder *coders,
+int						destroy_free_everything(t_config *config, t_coder *coders,
 							t_dongle *dongles);

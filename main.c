@@ -6,14 +6,13 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/25 09:47:48 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/25 11:56:08 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 #include <pthread.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
 
@@ -82,17 +81,17 @@ int	main(int ac, char **av)
 		return (0);
 	dongles = init_dongles(config);
 	coders = init_coders(config, dongles);
-	// init_queue(coders, config);
 	coders_threads = create_coders(config, coders);
+	if (!coders_threads)
+		return (0);
 	monitor = launch_monitor(coders, config);
 	i = 0;
 	while (i < config->nb_coders)
 		pthread_join(coders_threads[i++], NULL);
 	pthread_join(*monitor, NULL);
-	if (!coders_threads)
-		return (0);
-	if (destroy_mutexes(config, coders, dongles) > 0)
+	if (destroy_free_everything(config, coders, dongles) > 0)
 		fprintf(stderr, "An error happend when destroying mutexes and conds");
-	// free_everythings(coders_threads, coders, config, dongles);
+	free(coders_threads);
+	free(monitor);
 	return (0);
 }
