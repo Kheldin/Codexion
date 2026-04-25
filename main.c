@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/24 16:56:06 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/25 09:47:48 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ int	main(int ac, char **av)
 	pthread_join(*monitor, NULL);
 	if (!coders_threads)
 		return (0);
-	// destroy_mutexes(config, coders, dongles);
+	if (destroy_mutexes(config, coders, dongles) > 0)
+		fprintf(stderr, "An error happend when destroying mutexes and conds");
 	// free_everythings(coders_threads, coders, config, dongles);
 	return (0);
 }
