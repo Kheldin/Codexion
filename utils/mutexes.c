@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 14:17:25 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/25 12:02:01 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/27 10:06:57 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static int	destroy_dongles(int nb_dongle, t_dongle *dongles)
 		ret += pthread_mutex_destroy(dongles[i].dongle_mutex);
 		free(dongles[i].cd_cond);
 		free(dongles[i].dongle_mutex);
+		free(dongles[i].on_cd_mutex);
 		free(&dongles[i]);
 		i++;
 	}
@@ -48,11 +49,29 @@ static int	destroy_coders(int nb_coders, t_coder *coders)
 	return (ret);
 }
 
+void	free_queue(t_node **queue)
+{
+	t_node	*tmp;
+
+	tmp = *queue;
+	while (*queue)
+	{
+		tmp = (*queue)->next;
+		free(*queue);
+		*queue = tmp;
+	}
+}
+
 int	destroy_free_everything(t_config *config, t_coder *coders, t_dongle *dongles)
 {
 	int ret;
 
 	ret = 0;
+	if (config->queue)
+	{
+		printf("queue === %d\n", config->queue->coder->id);
+		free_queue(&config->queue);
+	}
 	ret += pthread_mutex_destroy(config->config_mutex);
 	ret += pthread_mutex_destroy(config->mutex_output);
 	ret += pthread_mutex_destroy(config->mutex_queue);
@@ -66,7 +85,6 @@ int	destroy_free_everything(t_config *config, t_coder *coders, t_dongle *dongles
 	free(config->mutex_queue);
 	free(config->mutex_output);
 	free(config->mutex_total_comp);
-	free(config->queue); // Have to free each node after
 	free(config->config_mutex);
 	return (ret);
 }
