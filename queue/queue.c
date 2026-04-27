@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/24 14:19:18 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/27 10:25:58 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,10 @@ void	dequeue(t_node **queue)
 	t_node	*node;
 
 	node = *queue;
-	if (!queue)
+	if (!*queue)
 		return ;
 	node->coder->config->queue = node->next;
+	free(node);
 }
 
 void	init_queue(t_coder *coders, t_config *config)
