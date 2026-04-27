@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/25 12:08:05 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/27 10:41:06 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,11 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 int	main(int ac, char **av)
 {
 	pthread_t	*coders_threads;
+	pthread_t	*monitor_thread;
 	t_config	*config;
 	t_dongle	*dongles;
 	t_coder		*coders;
-	pthread_t	*monitor;
+	t_monitor	*monitor;
 	int			i;
 
 	if (ac != 9)
@@ -84,14 +85,21 @@ int	main(int ac, char **av)
 	coders_threads = create_coders(config, coders);
 	if (!coders_threads)
 		return (0);
-	monitor = launch_monitor(coders, config);
+	monitor_thread = ft_calloc(1, sizeof(pthread_t));
+	if (!monitor_thread)
+	{
+		// error
+		return (0);
+	}
+	monitor = launch_monitor(monitor_thread, coders, config);
 	i = 0;
 	while (i < config->nb_coders)
 		pthread_join(coders_threads[i++], NULL);
-	pthread_join(*monitor, NULL);
+	pthread_join(*monitor_thread, NULL);
 	if (destroy_free_everything(config, coders, dongles) > 0)
 		fprintf(stderr, "An error happend when destroying mutexes and conds");
 	free(coders_threads);
 	free(monitor);
+	free(monitor_thread);
 	return (0);
 }

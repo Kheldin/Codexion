@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/25 11:56:10 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/27 10:30:22 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int						refactor(t_coder *coder);
 
 void					print_lock(char *msg, pthread_mutex_t *output_mutex);
 struct timespec			get_interval(void);
-pthread_t				*launch_monitor(t_coder *coders, t_config *config);
+t_monitor	*launch_monitor(pthread_t *monitor_thread, t_coder *coders, t_config *config);
 
 void					set_exit(t_config *config);
 int						check_exit(t_config *config);

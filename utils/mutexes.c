@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 14:17:25 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/27 10:08:53 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/27 10:36:42 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,7 @@ int	destroy_free_everything(t_config *config, t_coder *coders, t_dongle *dongles
 
 	ret = 0;
 	if (config->queue)
-	{
-		printf("queue === %d\n", config->queue->coder->id);
 		free_queue(&config->queue);
-		// free(config->queue);
-	}
 	ret += pthread_mutex_destroy(config->config_mutex);
 	ret += pthread_mutex_destroy(config->mutex_output);
 	ret += pthread_mutex_destroy(config->mutex_queue);
