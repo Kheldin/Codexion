@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/27 10:30:22 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/27 15:15:48 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_config
 	long				begin_timestamp;
 	int					exit;
 	int					total_compilations;
+	int					queue_mode;
 	pthread_mutex_t		*config_mutex;
 	pthread_mutex_t		*mutex_output;
 	pthread_mutex_t		*mutex_queue;
@@ -74,6 +75,7 @@ typedef struct s_node
 void					*ft_calloc(size_t nmemb, size_t size);
 
 int						print_instructions(void);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 t_coder					*init_coders(t_config *config, t_dongle *dongles);
 t_config				*init_config(char **av);

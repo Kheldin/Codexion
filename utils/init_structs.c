@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/25 12:07:11 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/27 15:14:34 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 	}
 	return (coders);
 }
+static int	parse_mode(char *mode)
+{
+	if (ft_strncmp(mode, "fifo", 4) == 0)
+		return (1);
+	return (1);
+}
 
 t_config	*init_config(char **av)
 {
@@ -104,6 +110,7 @@ t_config	*init_config(char **av)
 	config.mutex_output = mutex_output;
 	config.mutex_queue = mutex_queue;
 	config.queue = NULL;
+	config.queue_mode = parse_mode(av[8]);
 	config.total_compilations = 0;
 	config.mutex_total_comp = mutex_total_comp;
 	return (&config);
