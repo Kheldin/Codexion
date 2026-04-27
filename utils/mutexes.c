@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 14:17:25 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/27 10:36:42 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/27 11:08:24 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static int	destroy_dongles(int nb_dongle, t_dongle *dongles)
 		free(dongles[i].cd_cond);
 		free(dongles[i].dongle_mutex);
 		free(dongles[i].on_cd_mutex);
-		free(&dongles[i]);
 		i++;
 	}
 	return (ret);
@@ -43,7 +42,6 @@ static int	destroy_coders(int nb_coders, t_coder *coders)
 	{
 		ret += pthread_mutex_destroy(coders[i].last_compiled_mutex);
 		free(coders[i].last_compiled_mutex);
-		free(&coders[i]);
 		i++;
 	}
 	return (ret);
