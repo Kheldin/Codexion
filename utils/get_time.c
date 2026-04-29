@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 15:39:36 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/14 14:19:54 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 16:55:43 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
+#include <stdio.h>
 
 long	get_time(void)
 {
@@ -22,18 +23,17 @@ long	get_time(void)
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000L) + tv.tv_usec / 1000L);
 }
-#include <stdio.h>
 
-struct timespec	get_interval()
+struct timespec	get_interval(void)
 {
-	struct timespec timeToWait;
+	struct timespec	time_to_wait;
 
-	timeToWait.tv_sec = 1;
-	timeToWait.tv_nsec = 1000 * 1000000;
-	if (timeToWait.tv_nsec >= 1000000000)
+	time_to_wait.tv_sec = 1;
+	time_to_wait.tv_nsec = 1000 * 1000000;
+	if (time_to_wait.tv_nsec >= 1000000000)
 	{
-		timeToWait.tv_sec /= 1000000000;
-		timeToWait.tv_nsec = timeToWait.tv_nsec % 1000000000;
+		time_to_wait.tv_sec /= 1000000000;
+		time_to_wait.tv_nsec = time_to_wait.tv_nsec % 1000000000;
 	}
-	return (timeToWait);
+	return (time_to_wait);
 }

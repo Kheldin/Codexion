@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 16:18:27 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 16:54:02 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,11 @@ static int	acquire_dongles(t_coder *coder)
 {
 	pthread_mutex_lock(coder->config->mutex_queue);
 	enqueue(&coder->config->queue, ft_new_coder_node(coder));
-	// printf("size = %d\n", ft_queuesize(coder->config->queue));
 	while (check_exit(coder->config) == 0 && is_top_prio(coder) == 0)
 	{
 		pthread_cond_wait(coder->config->cond_top_prio,
 			coder->config->mutex_queue);
 	}
-	
 	pthread_mutex_unlock(coder->config->mutex_queue);
 	if (coder->left_dongle->id < coder->right_dongle->id)
 	{

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 16:46:51 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 16:52:17 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	ft_queuesize(t_node *queue)
 	}
 	return (count);
 }
+
 t_node	*ft_new_coder_node(t_coder *coder)
 {
 	t_node	*node;
@@ -71,7 +72,7 @@ static void	enqueue_fifo(t_node **lst, t_node *new)
 	ft_lstlast(*lst)->next = new;
 }
 
-static void acquire_mutex(t_node *new, t_node *current)
+static void	acquire_mutex(t_node *new, t_node *current)
 {
 	if (new->coder->id > current->coder->id)
 	{
@@ -106,7 +107,6 @@ static void	enqueue_edf(t_node **lst, t_node *new)
 		current = current->next;
 	}
 }
-	
 
 void	enqueue(t_node **lst, t_node *new)
 {
@@ -140,6 +140,7 @@ int	is_top_prio(t_coder *coder)
 	}
 	return (1);
 }
+
 void	dequeue(t_node **queue)
 {
 	t_node	*node;

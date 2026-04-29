@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 10:52:52 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 16:56:23 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ static void	set_coders_dongles(t_coder *coder, t_dongle *dongles, int pos,
 	{
 		coder->left_dongle = &dongles[nb_coders - 1];
 		coder->right_dongle = &dongles[pos];
-		return;
+		return ;
 	}
 	else if (pos == nb_coders - 1)
 	{
 		coder->left_dongle = &dongles[pos - 1];
 		coder->right_dongle = &dongles[pos];
-		return;
+		return ;
 	}
 	else
 	{
@@ -49,8 +49,8 @@ static void	set_last_compiled_mutex(t_coder *coder)
 
 t_coder	*init_coders(t_config *config, t_dongle *dongles)
 {
-	int				i;
-	t_coder			*coders;
+	int		i;
+	t_coder	*coders;
 
 	coders = ft_calloc(config->nb_coders, sizeof(t_coder));
 	if (!coders)
@@ -68,6 +68,7 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 	}
 	return (coders);
 }
+
 static int	parse_mode(char *mode)
 {
 	if (ft_strncmp(mode, "fifo", 4) == 0)
@@ -91,7 +92,8 @@ t_config	*init_config(char **av)
 	mutex_output = ft_calloc(1, sizeof(pthread_mutex_t));
 	mutex_total_comp = ft_calloc(1, sizeof(pthread_mutex_t));
 	cond_top_prio = ft_calloc(1, sizeof(pthread_cond_t));
-	if (!mutex || !mutex_output || !mutex_queue || !cond_top_prio || !mutex_total_comp)
+	if (!mutex || !mutex_output || !mutex_queue || !cond_top_prio
+		|| !mutex_total_comp)
 		return (NULL);
 	pthread_mutex_init(mutex, NULL);
 	pthread_mutex_init(mutex_queue, NULL);
@@ -126,7 +128,7 @@ static void	set_dongle_mutex(t_dongle *dongle)
 	on_cd_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
 	dongle_mutex = ft_calloc(1, sizeof(pthread_mutex_t));
 	if (!dongle_mutex || !on_cd_mutex)
-		return;
+		return ;
 	pthread_mutex_init(dongle_mutex, NULL);
 	pthread_mutex_init(on_cd_mutex, NULL);
 	dongle->on_cd_mutex = on_cd_mutex;
@@ -139,7 +141,7 @@ static void	set_dongle_cond(t_dongle *dongle)
 
 	cd_cond = ft_calloc(1, sizeof(pthread_cond_t));
 	if (!cd_cond)
-		return;
+		return ;
 	pthread_cond_init(cd_cond, NULL);
 	dongle->cd_cond = cd_cond;
 }

@@ -6,15 +6,14 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 10:35:04 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 16:49:19 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
-
+#include <unistd.h>
 
 typedef struct s_node	t_node;
 
@@ -75,12 +74,11 @@ typedef struct s_node
 void					*ft_calloc(size_t nmemb, size_t size);
 
 int						print_instructions(void);
-int	ft_strncmp(const char *s1, const char *s2, size_t n);
+int						ft_strncmp(const char *s1, const char *s2, size_t n);
 
 t_coder					*init_coders(t_config *config, t_dongle *dongles);
 t_config				*init_config(char **av);
 t_dongle				*init_dongles(t_config *config);
-
 
 long					get_time(void);
 
@@ -90,7 +88,8 @@ int						refactor(t_coder *coder);
 
 void					print_lock(char *msg, pthread_mutex_t *output_mutex);
 struct timespec			get_interval(void);
-t_monitor	*launch_monitor(pthread_t *monitor_thread, t_coder *coders, t_config *config);
+t_monitor				*launch_monitor(pthread_t *monitor_thread,
+							t_coder *coders, t_config *config);
 
 void					set_exit(t_config *config);
 int						check_exit(t_config *config);
@@ -102,5 +101,5 @@ void					enqueue(t_node **lst, t_node *new);
 int						is_top_prio(t_coder *coder);
 void					dequeue(t_node **lst);
 
-int						destroy_free_everything(t_config *config, t_coder *coders,
-							t_dongle *dongles);
+int						destroy_free_everything(t_config *config,
+							t_coder *coders, t_dongle *dongles);
