@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 16:49:19 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 16:59:22 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void					set_exit(t_config *config);
 int						check_exit(t_config *config);
 int						total_comp_reached(t_config *config);
 
-int						ft_queuesize(t_node *queue);
 t_node					*ft_new_coder_node(t_coder *coder);
 void					enqueue(t_node **lst, t_node *new);
 int						is_top_prio(t_coder *coder);
@@ -103,3 +102,5 @@ void					dequeue(t_node **lst);
 
 int						destroy_free_everything(t_config *config,
 							t_coder *coders, t_dongle *dongles);
+
+void					enqueue_edf(t_node **lst, t_node *new);
