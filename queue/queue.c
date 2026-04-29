@@ -6,23 +6,11 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 16:58:26 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 18:12:51 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
-
-t_node	*ft_new_coder_node(t_coder *coder)
-{
-	t_node	*node;
-
-	node = ft_calloc(1, sizeof(t_node));
-	if (!node)
-		return (NULL);
-	node->coder = coder;
-	node->next = NULL;
-	return (node);
-}
 
 static t_node	*ft_lstlast(t_node *lst)
 {

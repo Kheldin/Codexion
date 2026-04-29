@@ -6,11 +6,23 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 16:57:13 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 17:00:20 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 18:31:04 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <coders.h>
+
+t_node	*ft_new_coder_node(t_coder *coder)
+{
+	t_node	*node;
+
+	node = ft_calloc(1, sizeof(t_node));
+	if (!node)
+		return (NULL);
+	node->coder = coder;
+	node->next = NULL;
+	return (node);
+}
 
 static void	acquire_mutex(t_node *new, t_node *current)
 {
@@ -28,7 +40,10 @@ static void	insert_node(t_node *prev, t_node *current, t_node *new)
 {
 	if (prev)
 	{
-		prev->next = new;
+		if (prev == new->coder->config->queue)
+			new->coder->config->queue->next = new;
+		else
+			prev->next = new;
 		new->next = current;
 		return ;
 	}
