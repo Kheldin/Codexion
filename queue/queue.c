@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 18:12:51 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 21:01:22 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	is_top_prio(t_coder *coder)
 	t_coder	*top_coder;
 	t_node	*tmp;
 
+	if (!coder->config->queue)
+        return (1);
 	top_coder = coder->config->queue->coder;
 	if (top_coder->id == coder->id)
 		return (1);
@@ -66,13 +68,14 @@ int	is_top_prio(t_coder *coder)
 	return (1);
 }
 
-void	dequeue(t_node **queue)
+void dequeue(t_node **queue)
 {
-	t_node	*node;
+    t_node *to_free;
 
-	node = *queue;
-	if (!*queue)
-		return ;
-	node->coder->config->queue = node->next;
-	free(node);
+    if (!queue || !*queue)
+        return;
+
+    to_free = *queue;
+    *queue = (*queue)->next; 
+    free(to_free);
 }

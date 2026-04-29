@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 16:57:13 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 18:31:04 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 20:58:03 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,6 @@ void	enqueue_edf(t_node **lst, t_node *new)
 		prev = current;
 		current = current->next;
 	}
+	if (!current && prev)
+        prev->next = new;
 }
