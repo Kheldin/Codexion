@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 10:53:56 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 11:01:46 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,17 @@ static t_node	*ft_lstlast(t_node *lst)
 	return (lst);
 }
 
+static void	insert_node(t_node *prev, t_node *current, t_node *new)
+{
+	if (prev)
+	{
+		prev->next = new;
+		new->next = current;
+		return ;
+	}
+	new->next = current;
+}
+
 static void	enqueue_fifo(t_node **lst, t_node *new)
 {
 	if (!new)
@@ -57,17 +68,6 @@ static void	enqueue_fifo(t_node **lst, t_node *new)
 		return ;
 	}
 	ft_lstlast(*lst)->next = new;
-}
-
-static void	insert_node(t_node *prev, t_node *current, t_node *new)
-{
-	if (prev)
-	{
-		prev->next = new;
-		new->next = current;
-		return ;
-	}
-	new->next = current;
 }
 
 static void	enqueue_edf(t_node **lst, t_node *new)

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/27 10:41:06 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 10:59:37 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ int	main(int ac, char **av)
 	if (destroy_free_everything(config, coders, dongles) > 0)
 		fprintf(stderr, "An error happend when destroying mutexes and conds");
 	free(coders_threads);
+	free(dongles);
+	free(coders);
 	free(monitor);
 	free(monitor_thread);
 	return (0);
