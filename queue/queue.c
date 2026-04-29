@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/28 17:04:26 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 10:53:56 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ int	ft_queuesize(t_node *queue)
 	while (queue)
 	{
 		count++;
+		// printf("%d -> ", queue->coder->id);
 		queue = queue->next;
 	}
+	// printf("\n");
 	return (count);
 }
 t_node	*ft_new_coder_node(t_coder *coder)
@@ -57,17 +59,42 @@ static void	enqueue_fifo(t_node **lst, t_node *new)
 	ft_lstlast(*lst)->next = new;
 }
 
-static void	enqueue_edf(t_node **lst, t_node *new)
+static void	insert_node(t_node *prev, t_node *current, t_node *new)
 {
-	if (!new)
-		return ;
-	if (!*lst)
+	if (prev)
 	{
-		*lst = new;
+		prev->next = new;
+		new->next = current;
 		return ;
 	}
-	ft_lstlast(*lst)->next = new;
+	new->next = current;
 }
+
+static void	enqueue_edf(t_node **lst, t_node *new)
+{
+	t_node	*prev;
+	t_node	*current;
+
+	prev = NULL;
+	current = *lst;
+	pthread_mutex_lock(new->coder->last_compiled_mutex);
+	while (current)
+	{
+		pthread_mutex_lock(current->coder->last_compiled_mutex);
+		if (new->coder->last_compiled <= current->coder->last_compiled)
+		{
+			insert_node(prev, current, new);
+			pthread_mutex_unlock(current->coder->last_compiled_mutex);
+			pthread_mutex_unlock(new->coder->last_compiled_mutex);
+			return ;
+		}
+		pthread_mutex_unlock(current->coder->last_compiled_mutex);
+		prev = current;
+		current = current->next;
+	}
+	pthread_mutex_unlock(new->coder->last_compiled_mutex);
+}
+	
 
 void	enqueue(t_node **lst, t_node *new)
 {
@@ -77,7 +104,6 @@ void	enqueue(t_node **lst, t_node *new)
 		enqueue_fifo(lst, new);
 	else
 		enqueue_edf(lst, new);
-	// enqueue_fifo(lst, new);
 }
 
 int	is_top_prio(t_coder *coder)
@@ -111,27 +137,4 @@ void	dequeue(t_node **queue)
 		return ;
 	node->coder->config->queue = node->next;
 	free(node);
-}
-
-void	init_queue(t_coder *coders, t_config *config)
-{
-	int i;
-	t_node *head;
-
-	i = 0;
-	while (i < config->nb_coders)
-	{
-		if (i == 0)
-			head = ft_new_coder_node(&coders[i]);
-		else
-			enqueue(&head, ft_new_coder_node(&coders[i]));
-		i++;
-	}
-	config->queue = head;
-	// i = 0;
-	// while (head)
-	// {
-	// 	printf("ici %d\n", head->coder->id);
-	// 	head = head->next;
-	// }
 }

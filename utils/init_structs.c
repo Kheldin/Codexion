@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/27 15:14:34 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 10:52:52 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ static int	parse_mode(char *mode)
 {
 	if (ft_strncmp(mode, "fifo", 4) == 0)
 		return (1);
-	return (1);
+	else if ((ft_strncmp(mode, "edf", 3) == 0))
+		return (2);
+	return (-1);
 }
 
 t_config	*init_config(char **av)
