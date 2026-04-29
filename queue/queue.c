@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 15:18:59 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 16:46:51 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_node	*ft_lstlast(t_node *lst)
 	return (lst);
 }
 
-static void	insert_node(t_node **lst, t_node *prev, t_node *current, t_node *new)
+static void	insert_node(t_node *prev, t_node *current, t_node *new)
 {
 	if (prev)
 	{
@@ -54,7 +54,9 @@ static void	insert_node(t_node **lst, t_node *prev, t_node *current, t_node *new
 		return ;
 	}
 	new->next = current;
-	lst = &new;
+	pthread_mutex_lock(new->coder->config->config_mutex);
+	new->coder->config->queue = new;
+	pthread_mutex_unlock(new->coder->config->config_mutex);
 }
 
 static void	enqueue_fifo(t_node **lst, t_node *new)
@@ -69,6 +71,18 @@ static void	enqueue_fifo(t_node **lst, t_node *new)
 	ft_lstlast(*lst)->next = new;
 }
 
+static void acquire_mutex(t_node *new, t_node *current)
+{
+	if (new->coder->id > current->coder->id)
+	{
+		pthread_mutex_lock(new->coder->last_compiled_mutex);
+		pthread_mutex_lock(current->coder->last_compiled_mutex);
+		return ;
+	}
+	pthread_mutex_lock(current->coder->last_compiled_mutex);
+	pthread_mutex_lock(new->coder->last_compiled_mutex);
+}
+
 static void	enqueue_edf(t_node **lst, t_node *new)
 {
 	t_node	*prev;
@@ -76,23 +90,21 @@ static void	enqueue_edf(t_node **lst, t_node *new)
 
 	prev = NULL;
 	current = *lst;
-	pthread_mutex_lock(new->coder->last_compiled_mutex);
-	while (current)
+	while (current && current->coder->id != new->coder->id)
 	{
-		pthread_mutex_lock(current->coder->last_compiled_mutex);
-		if (new->coder->last_compiled >= current->coder->last_compiled)
+		acquire_mutex(new, current);
+		if (new->coder->last_compiled <= current->coder->last_compiled)
 		{
-			insert_node(lst, prev, current, new);
+			insert_node(prev, current, new);
 			pthread_mutex_unlock(current->coder->last_compiled_mutex);
 			pthread_mutex_unlock(new->coder->last_compiled_mutex);
 			return ;
 		}
 		pthread_mutex_unlock(current->coder->last_compiled_mutex);
+		pthread_mutex_unlock(new->coder->last_compiled_mutex);
 		prev = current;
 		current = current->next;
 	}
-	prev->next = new;
-	pthread_mutex_unlock(new->coder->last_compiled_mutex);
 }
 	
 
