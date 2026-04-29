@@ -1,3 +1,2 @@
 todo:
-    - edf
     - Gestion erreur des inits clean

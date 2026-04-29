@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/17 14:09:00 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 11:01:46 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 15:18:59 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@ int	ft_queuesize(t_node *queue)
 	while (queue)
 	{
 		count++;
-		// printf("%d -> ", queue->coder->id);
 		queue = queue->next;
 	}
-	// printf("\n");
 	return (count);
 }
 t_node	*ft_new_coder_node(t_coder *coder)
@@ -47,7 +45,7 @@ static t_node	*ft_lstlast(t_node *lst)
 	return (lst);
 }
 
-static void	insert_node(t_node *prev, t_node *current, t_node *new)
+static void	insert_node(t_node **lst, t_node *prev, t_node *current, t_node *new)
 {
 	if (prev)
 	{
@@ -56,6 +54,7 @@ static void	insert_node(t_node *prev, t_node *current, t_node *new)
 		return ;
 	}
 	new->next = current;
+	lst = &new;
 }
 
 static void	enqueue_fifo(t_node **lst, t_node *new)
@@ -81,9 +80,9 @@ static void	enqueue_edf(t_node **lst, t_node *new)
 	while (current)
 	{
 		pthread_mutex_lock(current->coder->last_compiled_mutex);
-		if (new->coder->last_compiled <= current->coder->last_compiled)
+		if (new->coder->last_compiled >= current->coder->last_compiled)
 		{
-			insert_node(prev, current, new);
+			insert_node(lst, prev, current, new);
 			pthread_mutex_unlock(current->coder->last_compiled_mutex);
 			pthread_mutex_unlock(new->coder->last_compiled_mutex);
 			return ;
@@ -92,6 +91,7 @@ static void	enqueue_edf(t_node **lst, t_node *new)
 		prev = current;
 		current = current->next;
 	}
+	prev->next = new;
 	pthread_mutex_unlock(new->coder->last_compiled_mutex);
 }
 	

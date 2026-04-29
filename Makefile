@@ -42,7 +42,7 @@ re: fclean all
 
 debug: all
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
-	valgrind  ./$(NAME) 2 100 2 15 10 6 10 fifo
+	valgrind --leak-check=full ./$(NAME) 7 3000 40 150 100 3 10 edf
 # --trace-children=yes --track-fds=yes --tool=helgrind -s
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
