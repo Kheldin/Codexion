@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 16:57:13 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 20:58:03 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/29 21:36:13 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,7 @@ static void	insert_node(t_node *prev, t_node *current, t_node *new)
 		return ;
 	}
 	new->next = current;
-	pthread_mutex_lock(new->coder->config->config_mutex);
 	new->coder->config->queue = new;
-	pthread_mutex_unlock(new->coder->config->config_mutex);
 }
 
 void	enqueue_edf(t_node **lst, t_node *new)
