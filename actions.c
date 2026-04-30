@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 21:31:51 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/30 09:35:53 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static void	lock_dongle(t_dongle *dongle)
 		pthread_cond_timedwait(dongle->cd_cond, dongle->on_cd_mutex, &target);
 	}
 	pthread_mutex_unlock(dongle->on_cd_mutex);
-	dongle->taken = 1;
 }
 
 static int	acquire_dongles(t_coder *coder)
@@ -53,8 +52,6 @@ static int	acquire_dongles(t_coder *coder)
 		lock_dongle(coder->left_dongle);
 		lock_dongle(coder->right_dongle);
 	}
-	coder->left_dongle->taken = 1;
-	coder->right_dongle->taken = 1;
 	return (0);
 }
 
@@ -80,8 +77,6 @@ int	compile(t_coder *coder)
 	coder->last_compiled = get_time();
 	pthread_mutex_unlock(coder->last_compiled_mutex);
 	usleep(coder->config->time_to_compile * 1000);
-	coder->left_dongle->taken = 0;
-	coder->right_dongle->taken = 0;
 	coder->left_dongle->available_at = get_time()
 		+ coder->config->dongle_cooldown;
 	coder->right_dongle->available_at = get_time()
