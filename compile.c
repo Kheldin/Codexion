@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 09:46:04 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/30 09:48:00 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,11 @@ static int	acquire_dongles(t_coder *coder)
 	}
 	return (0);
 }
-static void print_statements(t_coder *coder)
+
+static void	print_statements(t_coder *coder)
 {
 	printf("%ld %d has taken a dongle\n", get_time()
-	- coder->config->begin_timestamp, coder->id);
+		- coder->config->begin_timestamp, coder->id);
 	printf("%ld %d has taken a dongle\n", get_time()
 		- coder->config->begin_timestamp, coder->id);
 	printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp,

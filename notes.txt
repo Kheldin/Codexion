@@ -1,2 +1,0 @@
-todo:
-    - Gestion erreur des inits clean
