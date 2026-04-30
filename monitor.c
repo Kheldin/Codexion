@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 14:21:10 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 10:37:46 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/30 13:29:29 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,20 @@ static t_monitor	*init_monitor(t_coder *coders, t_config *config)
 	return (monitor);
 }
 
-t_monitor	*launch_monitor(pthread_t *monitor_thread, t_coder *coders,
-		t_config *config)
+int	launch_monitor(t_coder *coders, t_config *config)
 {
 	t_monitor	*monitor;
+	pthread_t	*monitor_thread;
 
+	monitor_thread = ft_calloc(1, sizeof(pthread_t));
+	if (!monitor_thread)
+		return (-1);
 	monitor = init_monitor(coders, config);
 	if (!monitor)
-		return (NULL);
+		return (-1);
 	pthread_create(monitor_thread, NULL, monitor_routine, monitor);
-	return (monitor);
+	pthread_join(*monitor_thread, NULL);
+	free(monitor);
+	free(monitor_thread);
+	return (0);
 }

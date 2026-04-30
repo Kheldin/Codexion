@@ -1,6 +1,6 @@
 NAME		:= codexion
 CC			:= cc
-CFLAGS		:= -Wall -Wextra -Werror  -pthread -g3 -fsanitize=leak
+CFLAGS		:= -Wall -Wextra -Werror  -pthread -g3 -fsanitize=thread
 
 SRCDIR		:= .
 DEPDIR		:= .deps

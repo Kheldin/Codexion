@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 11:00:09 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/30 13:30:59 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,44 +70,38 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 	return (coders_threads);
 }
 
-static void	wait_threads(int nb_coders, pthread_t *monitor, pthread_t *coders)
+static void	wait_threads(int nb_coders, pthread_t *coders)
 {
 	int	i;
 
 	i = 0;
 	while (i < nb_coders)
 		pthread_join(coders[i++], NULL);
-	pthread_join(*monitor, NULL);
 }
 
 int	main(int ac, char **av)
 {
 	pthread_t	*coders_threads;
-	pthread_t	*monitor_thread;
 	t_config	*config;
 	t_dongle	*dongles;
 	t_coder		*coders;
-	t_monitor	*monitor;
 
 	if (ac != 9)
 		return (print_instructions());
 	config = init_config(av);
 	if (!config)
-		return (0);
+		return (EXIT_FAILURE);
 	dongles = init_dongles(config);
 	coders = init_coders(config, dongles);
 	coders_threads = create_coders(config, coders);
-	monitor_thread = ft_calloc(1, sizeof(pthread_t));
-	if (!monitor_thread || !coders_threads)
-	{
-		// error
-		return (0);
-	}
-	monitor = launch_monitor(monitor_thread, coders, config);
-	wait_threads(config->nb_coders, monitor_thread, coders_threads);
+	if (!coders_threads)
+		return (EXIT_FAILURE);
+	if (launch_monitor(coders, config) == -1)
+		return (EXIT_FAILURE);
+	wait_threads(config->nb_coders, coders_threads);
 	if (destroy_free_everything(config, coders, dongles) > 0)
 		fprintf(stderr, "An error happend when destroying mutexes and conds");
-	free_threads(coders_threads, monitor_thread);
-	free_structs(monitor, dongles, coders);
-	return (0);
+	free_threads(coders_threads);
+	free_structs(dongles, coders);
+	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 11:01:31 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/30 13:29:10 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,7 @@ int						refactor(t_coder *coder);
 
 void					print_lock(char *msg, pthread_mutex_t *output_mutex);
 struct timespec			get_interval(void);
-t_monitor				*launch_monitor(pthread_t *monitor_thread,
-							t_coder *coders, t_config *config);
+int						launch_monitor(t_coder *coders, t_config *config);
 
 void					set_exit(t_config *config);
 int						check_exit(t_config *config);
@@ -104,7 +103,5 @@ int						destroy_free_everything(t_config *config,
 
 void					enqueue_edf(t_node **lst, t_node *new);
 
-void					free_structs(t_monitor *monitor, t_dongle *dongles,
-							t_coder *coders);
-void					free_threads(pthread_t *coders_threads,
-							pthread_t *monitor_thread);
+void					free_structs(t_dongle *dongles, t_coder *coders);
+void					free_threads(pthread_t *coders_threads);
