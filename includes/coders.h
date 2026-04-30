@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 09:36:05 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/30 11:01:31 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,3 +103,8 @@ int						destroy_free_everything(t_config *config,
 							t_coder *coders, t_dongle *dongles);
 
 void					enqueue_edf(t_node **lst, t_node *new);
+
+void					free_structs(t_monitor *monitor, t_dongle *dongles,
+							t_coder *coders);
+void					free_threads(pthread_t *coders_threads,
+							pthread_t *monitor_thread);

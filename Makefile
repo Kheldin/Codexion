@@ -10,7 +10,7 @@ BUILDDIR	:= build
 SRCFILES	:= main.c utils/ft_calloc.c utils/print_instructions.c utils/init_dongles.c \
 			   utils/get_time.c compile.c utils/print_lock.c monitor.c utils/check_exit.c \
 			   queue/queue.c utils/mutexes.c queue/edf.c utils/init_coders.c utils/init_config.c \
-			   debug.c refactor.c
+			   debug.c refactor.c utils/free_everything.c
 
 OBJS		:= $(addprefix $(BUILDDIR)/,$(SRCFILES:.c=.o))
 HEADERS		:= $(INCDIR)/coders.h

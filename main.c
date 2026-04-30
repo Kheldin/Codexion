@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 10:59:37 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/30 11:00:09 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <unistd.h>
+
+static void	increment_total_comp(t_coder *coder)
+{
+	pthread_mutex_lock(coder->config->mutex_total_comp);
+	coder->config->total_compilations += 1;
+	pthread_mutex_unlock(coder->config->mutex_total_comp);
+}
 
 void	*coders_routine(void *data)
 {
@@ -39,9 +46,7 @@ void	*coders_routine(void *data)
 		if (refactor(coder) == 1)
 			return (NULL);
 		coder->nb_compile++;
-		pthread_mutex_lock(coder->config->mutex_total_comp);
-		coder->config->total_compilations += 1;
-		pthread_mutex_unlock(coder->config->mutex_total_comp);
+		increment_total_comp(coder);
 	}
 	return (NULL);
 }
@@ -65,6 +70,16 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 	return (coders_threads);
 }
 
+static void	wait_threads(int nb_coders, pthread_t *monitor, pthread_t *coders)
+{
+	int	i;
+
+	i = 0;
+	while (i < nb_coders)
+		pthread_join(coders[i++], NULL);
+	pthread_join(*monitor, NULL);
+}
+
 int	main(int ac, char **av)
 {
 	pthread_t	*coders_threads;
@@ -73,7 +88,6 @@ int	main(int ac, char **av)
 	t_dongle	*dongles;
 	t_coder		*coders;
 	t_monitor	*monitor;
-	int			i;
 
 	if (ac != 9)
 		return (print_instructions());
@@ -83,25 +97,17 @@ int	main(int ac, char **av)
 	dongles = init_dongles(config);
 	coders = init_coders(config, dongles);
 	coders_threads = create_coders(config, coders);
-	if (!coders_threads)
-		return (0);
 	monitor_thread = ft_calloc(1, sizeof(pthread_t));
-	if (!monitor_thread)
+	if (!monitor_thread || !coders_threads)
 	{
 		// error
 		return (0);
 	}
 	monitor = launch_monitor(monitor_thread, coders, config);
-	i = 0;
-	while (i < config->nb_coders)
-		pthread_join(coders_threads[i++], NULL);
-	pthread_join(*monitor_thread, NULL);
+	wait_threads(config->nb_coders, monitor_thread, coders_threads);
 	if (destroy_free_everything(config, coders, dongles) > 0)
 		fprintf(stderr, "An error happend when destroying mutexes and conds");
-	free(coders_threads);
-	free(dongles);
-	free(coders);
-	free(monitor);
-	free(monitor_thread);
+	free_threads(coders_threads, monitor_thread);
+	free_structs(monitor, dongles, coders);
 	return (0);
 }
