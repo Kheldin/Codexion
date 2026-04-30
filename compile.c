@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   actions.c                                          :+:      :+:    :+:   */
+/*   compile.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/05 16:24:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 09:35:53 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/30 09:46:04 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,15 @@ static int	acquire_dongles(t_coder *coder)
 	}
 	return (0);
 }
+static void print_statements(t_coder *coder)
+{
+	printf("%ld %d has taken a dongle\n", get_time()
+	- coder->config->begin_timestamp, coder->id);
+	printf("%ld %d has taken a dongle\n", get_time()
+		- coder->config->begin_timestamp, coder->id);
+	printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp,
+		coder->id);
+}
 
 int	compile(t_coder *coder)
 {
@@ -66,12 +75,7 @@ int	compile(t_coder *coder)
 		pthread_mutex_unlock(coder->config->mutex_output);
 		return (1);
 	}
-	printf("%ld %d has taken a dongle\n", get_time()
-		- coder->config->begin_timestamp, coder->id);
-	printf("%ld %d has taken a dongle\n", get_time()
-		- coder->config->begin_timestamp, coder->id);
-	printf("%ld %d is compiling\n", get_time() - coder->config->begin_timestamp,
-		coder->id);
+	print_statements(coder);
 	pthread_mutex_unlock(coder->config->mutex_output);
 	pthread_mutex_lock(coder->last_compiled_mutex);
 	coder->last_compiled = get_time();
@@ -83,38 +87,6 @@ int	compile(t_coder *coder)
 		+ coder->config->dongle_cooldown;
 	pthread_mutex_unlock(coder->left_dongle->dongle_mutex);
 	pthread_mutex_unlock(coder->right_dongle->dongle_mutex);
-	pthread_cond_broadcast(coder->config->cond_top_prio);
-	return (0);
-}
-
-int	debug(t_coder *coder)
-{
-	pthread_mutex_lock(coder->config->mutex_output);
-	if (check_exit(coder->config))
-	{
-		pthread_mutex_unlock(coder->config->mutex_output);
-		return (1);
-	}
-	printf("%ld %d is debugging\n", get_time() - coder->config->begin_timestamp,
-		coder->id);
-	pthread_mutex_unlock(coder->config->mutex_output);
-	usleep(coder->config->time_to_debug * 1000);
-	pthread_cond_broadcast(coder->config->cond_top_prio);
-	return (0);
-}
-
-int	refactor(t_coder *coder)
-{
-	pthread_mutex_lock(coder->config->mutex_output);
-	if (check_exit(coder->config))
-	{
-		pthread_mutex_unlock(coder->config->mutex_output);
-		return (1);
-	}
-	printf("%ld %d is refactoring\n", get_time()
-		- coder->config->begin_timestamp, coder->id);
-	pthread_mutex_unlock(coder->config->mutex_output);
-	usleep(coder->config->time_to_refactor * 1000);
 	pthread_cond_broadcast(coder->config->cond_top_prio);
 	return (0);
 }
