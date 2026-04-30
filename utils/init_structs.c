@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/29 14:10:55 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/29 16:56:23 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/04/30 09:14:09 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,45 +78,52 @@ static int	parse_mode(char *mode)
 	return (-1);
 }
 
+static void	set_config_attr(t_config *config, char **av)
+{
+	pthread_mutex_t	*mutex_queue;
+	pthread_mutex_t	*mutex_total_comp;
+
+	mutex_total_comp = ft_calloc(1, sizeof(pthread_mutex_t));
+	mutex_queue = ft_calloc(1, sizeof(pthread_mutex_t));
+	if (!mutex_queue || !mutex_total_comp)
+		return ;
+	pthread_mutex_init(mutex_queue, NULL);
+	pthread_mutex_init(mutex_total_comp, NULL);
+	config->nb_coders = atoi(av[1]);
+	config->time_to_burnout = atoi(av[2]);
+	config->time_to_compile = atoi(av[3]);
+	config->time_to_debug = atoi(av[4]);
+	config->time_to_refactor = atoi(av[5]);
+	config->nb_compile_required = atoi(av[6]);
+	config->dongle_cooldown = atoi(av[7]);
+	config->begin_timestamp = get_time();
+	config->exit = 0;
+	config->mutex_queue = mutex_queue;
+	config->queue = NULL;
+	config->queue_mode = parse_mode(av[8]);
+	config->total_compilations = 0;
+	config->mutex_total_comp = mutex_total_comp;
+}
+
 t_config	*init_config(char **av)
 {
 	static t_config	config;
 	pthread_mutex_t	*mutex;
-	pthread_mutex_t	*mutex_queue;
 	pthread_mutex_t	*mutex_output;
-	pthread_mutex_t	*mutex_total_comp;
 	pthread_cond_t	*cond_top_prio;
 
 	mutex = ft_calloc(1, sizeof(pthread_mutex_t));
-	mutex_queue = ft_calloc(1, sizeof(pthread_mutex_t));
 	mutex_output = ft_calloc(1, sizeof(pthread_mutex_t));
-	mutex_total_comp = ft_calloc(1, sizeof(pthread_mutex_t));
 	cond_top_prio = ft_calloc(1, sizeof(pthread_cond_t));
-	if (!mutex || !mutex_output || !mutex_queue || !cond_top_prio
-		|| !mutex_total_comp)
+	if (!mutex || !mutex_output || !cond_top_prio)
 		return (NULL);
 	pthread_mutex_init(mutex, NULL);
-	pthread_mutex_init(mutex_queue, NULL);
 	pthread_mutex_init(mutex_output, NULL);
-	pthread_mutex_init(mutex_total_comp, NULL);
 	pthread_cond_init(cond_top_prio, NULL);
-	config.nb_coders = atoi(av[1]);
-	config.time_to_burnout = atoi(av[2]);
-	config.time_to_compile = atoi(av[3]);
-	config.time_to_debug = atoi(av[4]);
-	config.time_to_refactor = atoi(av[5]);
-	config.nb_compile_required = atoi(av[6]);
-	config.dongle_cooldown = atoi(av[7]);
-	config.begin_timestamp = get_time();
-	config.exit = 0;
 	config.config_mutex = mutex;
 	config.cond_top_prio = cond_top_prio;
 	config.mutex_output = mutex_output;
-	config.mutex_queue = mutex_queue;
-	config.queue = NULL;
-	config.queue_mode = parse_mode(av[8]);
-	config.total_compilations = 0;
-	config.mutex_total_comp = mutex_total_comp;
+	set_config_attr(&config, av);
 	return (&config);
 }
 
