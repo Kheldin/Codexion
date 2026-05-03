@@ -6,14 +6,21 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 09:27:18 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 09:28:48 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/03 11:57:45 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 
+static void	increment_total_comp(t_coder *coder)
+{
+	pthread_mutex_lock(coder->config->mutex_total_comp);
+	coder->config->total_compilations += 1;
+	pthread_mutex_unlock(coder->config->mutex_total_comp);
+}
+
 static void	set_coders_dongles(t_coder *coder, t_dongle *dongles, int pos,
-	int nb_coders)
+		int nb_coders)
 {
 	if (pos == 0)
 	{
@@ -66,4 +73,28 @@ t_coder	*init_coders(t_config *config, t_dongle *dongles)
 		i++;
 	}
 	return (coders);
+}
+
+void	*coders_routine(void *data)
+{
+	t_coder	*coder;
+
+	coder = (t_coder *)data;
+	if (coder->id % 2 == 0)
+		usleep(1000);
+	while (coder->nb_compile < coder->config->nb_compile_required)
+	{
+		pthread_mutex_lock(coder->config->config_mutex);
+		if (coder->config->exit == 1)
+		{
+			pthread_mutex_unlock(coder->config->config_mutex);
+			return (NULL);
+		}
+		pthread_mutex_unlock(coder->config->config_mutex);
+		if (compile(coder) == 1 || debug(coder) == 1 || refactor(coder) == 1)
+			return (NULL);
+		coder->nb_compile++;
+		increment_total_comp(coder);
+	}
+	return (NULL);
 }

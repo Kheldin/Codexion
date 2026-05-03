@@ -6,15 +6,15 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 11:31:40 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/03 12:47:02 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/time.h>
+#include <unistd.h>
 
 typedef struct s_node	t_node;
 
@@ -73,11 +73,11 @@ typedef struct s_node
 
 typedef struct s_data
 {
-	t_config	*config;
-	t_dongle	*dongles;
-	t_coder		*coders;
-	pthread_t	*coders_threads;
-}	t_data;
+	t_config			*config;
+	t_dongle			*dongles;
+	t_coder				*coders;
+	pthread_t			*coders_threads;
+}						t_data;
 
 void					*ft_calloc(size_t nmemb, size_t size);
 
@@ -85,6 +85,7 @@ int						print_instructions(void);
 int						ft_strncmp(const char *s1, const char *s2, size_t n);
 
 t_coder					*init_coders(t_config *config, t_dongle *dongles);
+void					*coders_routine(void *data);
 t_config				*init_config(char **av);
 t_dongle				*init_dongles(t_config *config);
 
@@ -114,3 +115,7 @@ void					enqueue_edf(t_node **lst, t_node *new);
 
 void					free_structs(t_dongle *dongles, t_coder *coders);
 void					free_threads(pthread_t *coders_threads);
+
+t_data					*init_all(char **av);
+
+void					free_data(t_data *data);
