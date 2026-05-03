@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 09:25:37 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 09:29:03 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/03 12:56:02 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 static int	parse_mode(char *mode)
 {
-	if (ft_strncmp(mode, "fifo", 4) == 0)
+	if (!(ft_strlen(mode) == 3 || ft_strlen(mode) == 4))
+		return (-1);
+	if (ft_strlen(mode) == 4 && (ft_strncmp(mode, "fifo", 4) == 0))
 		return (1);
-	else if ((ft_strncmp(mode, "edf", 3) == 0))
+	else if (ft_strlen(mode) == 3 && (ft_strncmp(mode, "edf", 3) == 0))
 		return (2);
 	return (-1);
 }
@@ -67,5 +69,11 @@ t_config	*init_config(char **av)
 	config.cond_top_prio = cond_top_prio;
 	config.mutex_output = mutex_output;
 	set_config_attr(&config, av);
+	if (config.queue_mode == -1)
+	{
+		fprintf(stderr,
+			"Error: init_all: schedule mode must be fifo or edf.\n");
+		return (NULL);
+	}
 	return (&config);
 }

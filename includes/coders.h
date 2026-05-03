@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 12:47:02 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/03 12:51:59 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void					*ft_calloc(size_t nmemb, size_t size);
 
 int						print_instructions(void);
 int						ft_strncmp(const char *s1, const char *s2, size_t n);
+int						ft_strlen(char *str);
 
 t_coder					*init_coders(t_config *config, t_dongle *dongles);
 void					*coders_routine(void *data);

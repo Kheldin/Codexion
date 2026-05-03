@@ -46,6 +46,7 @@ debug: all
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
 	valgrind --leak-check=full -s ./$(NAME) 7 3000 40 150 100 3 10 fifo
 # --trace-children=yes --track-fds=yes --tool=helgrind -s
+
 gdb_debug: re $(OBJS)
 	$(CC) $(CFLAGS) -g3 $(OBJS) -o $(NAME)
 	gdb --args ./$(NAME) $(ARG) 3 100 200 150 100 5 1 str
