@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 13:30:59 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/03 11:20:43 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,7 @@ void	*coders_routine(void *data)
 			return (NULL);
 		}
 		pthread_mutex_unlock(coder->config->config_mutex);
-		if (compile(coder) == 1)
-			return (NULL);
-		if (debug(coder) == 1)
-			return (NULL);
-		if (refactor(coder) == 1)
+		if (compile(coder) == 1 || debug(coder) == 1 || refactor(coder) == 1)
 			return (NULL);
 		coder->nb_compile++;
 		increment_total_comp(coder);
@@ -59,12 +55,19 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 	i = 0;
 	coders_threads = ft_calloc((config->nb_coders + 1), sizeof(pthread_t));
 	if (!coders_threads || !coders)
+	{
+		fprintf(stderr, "Error: create_coders: calloc failed\n");
 		return (NULL);
+	}
 	while (i < config->nb_coders)
 	{
 		if (pthread_create(&coders_threads[i], NULL, coders_routine,
 				&coders[i]) != 0)
+		{
+			fprintf(stderr, "Error: create_coders: pthread_create failed\n");
+			free(coders_threads);
 			return (NULL);
+		}
 		i++;
 	}
 	return (coders_threads);
@@ -79,29 +82,87 @@ static void	wait_threads(int nb_coders, pthread_t *coders)
 		pthread_join(coders[i++], NULL);
 }
 
+static void	free_data(t_data *data)
+{
+	if (!data)
+		return ;
+	free_threads(data->coders_threads);
+	free_structs(data->dongles, data->coders);
+	free(data);
+}
+
+static t_data	*alloc_data(void)
+{
+	t_data	*data;
+
+	data = ft_calloc(1, sizeof(t_data));
+	if (!data)
+		fprintf(stderr, "Error: init_all: data calloc failed\n");
+	return (data);
+}
+
+static int	init_components(t_data *data, char **av)
+{
+	data->config = init_config(av);
+	if (!data->config)
+	{
+		fprintf(stderr, "Error: init_all: init_config failed\n");
+		return (-1);
+	}
+	data->dongles = init_dongles(data->config);
+	if (!data->dongles)
+	{
+		fprintf(stderr, "Error: init_all: init_dongles failed\n");
+		return (-1);
+	}
+	data->coders = init_coders(data->config, data->dongles);
+	if (!data->coders)
+	{
+		fprintf(stderr, "Error: init_all: init_coders failed\n");
+		return (-1);
+	}
+	return (0);
+}
+
+static t_data	*init_all(char **av)
+{
+	t_data	*data;
+
+	data = alloc_data();
+	if (!data)
+		return (NULL);
+	if (init_components(data, av) == -1)
+	{
+		free_data(data);
+		return (NULL);
+	}
+	data->coders_threads = create_coders(data->config, data->coders);
+	if (!data->coders_threads)
+	{
+		free_data(data);
+		return (NULL);
+	}
+	return (data);
+}
+
 int	main(int ac, char **av)
 {
-	pthread_t	*coders_threads;
-	t_config	*config;
-	t_dongle	*dongles;
-	t_coder		*coders;
+	t_data	*data;
 
 	if (ac != 9)
 		return (print_instructions());
-	config = init_config(av);
-	if (!config)
+	data = init_all(av);
+	if (!data)
 		return (EXIT_FAILURE);
-	dongles = init_dongles(config);
-	coders = init_coders(config, dongles);
-	coders_threads = create_coders(config, coders);
-	if (!coders_threads)
+	if (launch_monitor(data->coders, data->config) == -1)
+	{
+		fprintf(stderr, "Error: launch_monitor failed\n");
+		free_data(data);
 		return (EXIT_FAILURE);
-	if (launch_monitor(coders, config) == -1)
-		return (EXIT_FAILURE);
-	wait_threads(config->nb_coders, coders_threads);
-	if (destroy_free_everything(config, coders, dongles) > 0)
-		fprintf(stderr, "An error happend when destroying mutexes and conds");
-	free_threads(coders_threads);
-	free_structs(dongles, coders);
+	}
+	wait_threads(data->config->nb_coders, data->coders_threads);
+	if (destroy_free_everything(data->config, data->coders, data->dongles) > 0)
+		fprintf(stderr, "Error: destroy mutexes/conds failed\n");
+	free_data(data);
 	return (EXIT_SUCCESS);
 }

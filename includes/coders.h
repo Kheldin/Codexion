@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 13:29:10 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/03 10:47:53 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,14 @@ typedef struct s_node
 	t_coder				*coder;
 	t_node				*next;
 }						t_node;
+
+typedef struct s_data
+{
+	t_config	*config;
+	t_dongle	*dongles;
+	t_coder		*coders;
+	pthread_t	*coders_threads;
+}	t_data;
 
 void					*ft_calloc(size_t nmemb, size_t size);
 
