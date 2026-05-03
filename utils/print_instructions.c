@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 16:39:15 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 12:52:31 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/03 13:00:36 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,17 @@
 
 int	print_instructions(void)
 {
-	printf("Enter the args in the following order please.\n");
-	printf("\t=> number_of_coders\n");
-	printf("\t=> time_to_burnout\n");
-	printf("\t=> time_to_compile\n");
-	printf("\t=> time_to_debug\n");
-	printf("\t=> time_to_refactor\n");
-	printf("\t=> number_of_compiles_required\n");
-	printf("\t=> dongle_cooldown\n");
-	printf("\t=> scheduler\n");
+	fprintf(stderr, "Enter the args in the following order please.\n");
+	fprintf(stderr, "scheduler should be fifo or edf.\n");
+	fprintf(stderr, "Other value must not be negative.\n");
+	fprintf(stderr, "\t=> number_of_coders\n");
+	fprintf(stderr, "\t=> time_to_burnout\n");
+	fprintf(stderr, "\t=> time_to_compile\n");
+	fprintf(stderr, "\t=> time_to_debug\n");
+	fprintf(stderr, "\t=> time_to_refactor\n");
+	fprintf(stderr, "\t=> number_of_compiles_required\n");
+	fprintf(stderr, "\t=> dongle_cooldown\n");
+	fprintf(stderr, "\t=> scheduler\n");
 	return (0);
 }
 

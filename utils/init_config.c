@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 09:25:37 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 12:56:02 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/03 13:03:55 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,20 @@ static int	parse_mode(char *mode)
 	else if (ft_strlen(mode) == 3 && (ft_strncmp(mode, "edf", 3) == 0))
 		return (2);
 	return (-1);
+}
+
+static int	check_negative_value(char **av, t_config *config)
+{
+	int	i;
+
+	i = 1;
+	while (i < 8)
+	{
+		if (atoi(av[i]) < 0)
+			return -1;
+		i++;
+	}
+	return (config->queue_mode);
 }
 
 static void	set_config_attr(t_config *config, char **av)
@@ -48,6 +62,7 @@ static void	set_config_attr(t_config *config, char **av)
 	config->queue_mode = parse_mode(av[8]);
 	config->total_compilations = 0;
 	config->mutex_total_comp = mutex_total_comp;
+	config->queue_mode = check_negative_value(av, config);
 }
 
 t_config	*init_config(char **av)
@@ -71,8 +86,7 @@ t_config	*init_config(char **av)
 	set_config_attr(&config, av);
 	if (config.queue_mode == -1)
 	{
-		fprintf(stderr,
-			"Error: init_all: schedule mode must be fifo or edf.\n");
+		print_instructions();
 		return (NULL);
 	}
 	return (&config);
