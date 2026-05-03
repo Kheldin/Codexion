@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 09:25:37 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 13:03:55 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/03 13:05:44 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	check_negative_value(char **av, t_config *config)
 	while (i < 8)
 	{
 		if (atoi(av[i]) < 0)
-			return -1;
+			return (-1);
 		i++;
 	}
 	return (config->queue_mode);
