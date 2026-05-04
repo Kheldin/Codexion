@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 09:27:18 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/04 09:49:09 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/04 13:21:34 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ static void	increment_total_comp(t_coder *coder)
 {
 	pthread_mutex_lock(coder->config->mutex_total_comp);
 	coder->config->total_compilations += 1;
+	pthread_mutex_lock(coder->last_compiled_mutex);
+	coder->nb_compile += 1;
+	pthread_mutex_unlock(coder->last_compiled_mutex);
 	pthread_mutex_unlock(coder->config->mutex_total_comp);
 }
 
@@ -93,7 +96,6 @@ void	*coders_routine(void *data)
 		pthread_mutex_unlock(coder->config->config_mutex);
 		if (compile(coder) == 1 || debug(coder) == 1 || refactor(coder) == 1)
 			return (NULL);
-		coder->nb_compile++;
 		increment_total_comp(coder);
 	}
 	return (NULL);
