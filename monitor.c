@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 14:21:10 by kacherch          #+#    #+#             */
-/*   Updated: 2026/04/30 13:29:29 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/04 09:39:03 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 static int	check_timeout(t_monitor *monitor, int i)
 {
 	pthread_mutex_lock(monitor->coders[i].last_compiled_mutex);
+	if (monitor->coders[i].nb_compile == monitor->config->nb_compile_required)
+	{
+		pthread_mutex_unlock(monitor->coders[i].last_compiled_mutex);
+		return (0);
+	}
 	if (get_time() > monitor->coders[i].last_compiled
 		+ monitor->config->time_to_burnout)
 	{
