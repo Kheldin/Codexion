@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 09:27:18 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/04 13:21:34 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/07 19:41:46 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	*coders_routine(void *data)
 	t_coder	*coder;
 
 	coder = (t_coder *)data;
+	if (coder->config->nb_coders == 1)
+		return (NULL);
 	if (coder->id % 2 == 0)
 		usleep(10000);
 	while (coder->nb_compile < coder->config->nb_compile_required)
