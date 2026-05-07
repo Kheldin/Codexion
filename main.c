@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/07 23:53:22 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/07 23:59:29 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ int	main(int ac, char **av)
 		return (print_instructions());
 	data = init_all(av);
 	if (!data)
+	{
 		return (EXIT_FAILURE);
+	}
 	if (launch_monitor(data->coders, data->config) == -1)
 	{
 		fprintf(stderr, "Error: launch_monitor failed\n");

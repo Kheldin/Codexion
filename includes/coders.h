@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/07 23:53:35 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/08 00:02:48 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,3 +123,4 @@ void					free_threads(pthread_t *coders_threads);
 t_data					*init_all(char **av);
 
 void					free_data(t_data *data);
+void					free_everything(t_data *data);

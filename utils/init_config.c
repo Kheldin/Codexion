@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 09:25:37 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/07 18:55:16 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/08 00:07:29 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ static void	set_config_attr(t_config *config, char **av)
 	pthread_mutex_t	*mutex_queue;
 	pthread_mutex_t	*mutex_total_comp;
 
+	config->queue_mode = parse_mode(av[8]);
+	config->queue_mode = check_value(av, config);
+	if (config->queue_mode == -1)
+		return ;
 	mutex_total_comp = ft_calloc(1, sizeof(pthread_mutex_t));
 	mutex_queue = ft_calloc(1, sizeof(pthread_mutex_t));
 	if (!mutex_queue || !mutex_total_comp)
@@ -66,11 +70,8 @@ static void	set_config_attr(t_config *config, char **av)
 	config->begin_timestamp = get_time();
 	config->exit = 0;
 	config->mutex_queue = mutex_queue;
-	config->queue = NULL;
-	config->queue_mode = parse_mode(av[8]);
 	config->total_compilations = 0;
 	config->mutex_total_comp = mutex_total_comp;
-	config->queue_mode = check_value(av, config);
 }
 
 t_config	*init_config(char **av)
@@ -80,6 +81,12 @@ t_config	*init_config(char **av)
 	pthread_mutex_t	*mutex_output;
 	pthread_cond_t	*cond_top_prio;
 
+	set_config_attr(&config, av);
+	if (config.queue_mode == -1)
+	{
+		print_instructions();
+		return (NULL);
+	}
 	mutex = ft_calloc(1, sizeof(pthread_mutex_t));
 	mutex_output = ft_calloc(1, sizeof(pthread_mutex_t));
 	cond_top_prio = ft_calloc(1, sizeof(pthread_cond_t));
@@ -91,11 +98,6 @@ t_config	*init_config(char **av)
 	config.config_mutex = mutex;
 	config.cond_top_prio = cond_top_prio;
 	config.mutex_output = mutex_output;
-	set_config_attr(&config, av);
-	if (config.queue_mode == -1)
-	{
-		print_instructions();
-		return (NULL);
-	}
+	config.queue = NULL;
 	return (&config);
 }

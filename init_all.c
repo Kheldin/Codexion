@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 12:42:41 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/07 23:54:16 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/08 00:02:36 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 	if (!coders_threads || !coders)
 	{
 		fprintf(stderr, "Error: create_coders: calloc failed\n");
+		free(config);
 		return (NULL);
 	}
 	while (i < config->nb_coders)
@@ -82,7 +83,7 @@ t_data	*init_all(char **av)
 		return (NULL);
 	if (init_components(data, av) == -1)
 	{
-		free_data(data);
+		free_everything(data);
 		return (NULL);
 	}
 	data->coders_threads = create_coders(data->config, data->coders);
