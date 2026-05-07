@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 12:51:59 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/07 18:51:14 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct s_data
 void					*ft_calloc(size_t nmemb, size_t size);
 
 int						print_instructions(void);
+int						ft_isdigit(int c);
 int						ft_strncmp(const char *s1, const char *s2, size_t n);
 int						ft_strlen(char *str);
 

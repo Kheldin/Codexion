@@ -26,7 +26,7 @@ $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 
-$(BUILDDIR)/%.o: %.c $(HEADERS)
+$(BUILDDIR)/%.o: %.c $(HEADERS) Makefile
 	mkdir -p $(dir $@) $(DEPDIR)/$(dir $<)
 	$(CC) $(CFLAGS) $(DEPFLAGS) -I$(INCDIR) -c $< -o $@
 

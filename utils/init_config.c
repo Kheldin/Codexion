@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 09:25:37 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 13:05:44 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/07 18:55:16 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,21 @@ static int	parse_mode(char *mode)
 	return (-1);
 }
 
-static int	check_negative_value(char **av, t_config *config)
+static int	check_value(char **av, t_config *config)
 {
 	int	i;
+	int	j;
 
 	i = 1;
 	while (i < 8)
 	{
+		j = 0;
+		while (av[i][j])
+		{
+			if (!ft_isdigit(av[i][j]))
+				return (-1);
+			j++;
+		}
 		if (atoi(av[i]) < 0)
 			return (-1);
 		i++;
@@ -62,7 +70,7 @@ static void	set_config_attr(t_config *config, char **av)
 	config->queue_mode = parse_mode(av[8]);
 	config->total_compilations = 0;
 	config->mutex_total_comp = mutex_total_comp;
-	config->queue_mode = check_negative_value(av, config);
+	config->queue_mode = check_value(av, config);
 }
 
 t_config	*init_config(char **av)

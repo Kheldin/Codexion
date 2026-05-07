@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/27 16:39:15 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 13:00:36 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/07 18:51:00 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,11 @@ int	ft_strlen(char *str)
 	while (str[i])
 		i++;
 	return (i);
+}
+
+int	ft_isdigit(int c)
+{
+	if (c < '0' || c > '9')
+		return (0);
+	return (1);
 }
