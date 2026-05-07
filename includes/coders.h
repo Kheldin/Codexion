@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:42:49 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/07 18:51:14 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/07 23:53:35 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ int						print_instructions(void);
 int						ft_isdigit(int c);
 int						ft_strncmp(const char *s1, const char *s2, size_t n);
 int						ft_strlen(char *str);
+
+void					wait_threads(int nb_coders, pthread_t *coders);
 
 t_coder					*init_coders(t_config *config, t_dongle *dongles);
 void					*coders_routine(void *data);

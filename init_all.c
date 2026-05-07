@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/03 12:42:41 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 12:44:56 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/07 23:54:16 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ pthread_t	*create_coders(t_config *config, t_coder *coders)
 				&coders[i]) != 0)
 		{
 			fprintf(stderr, "Error: create_coders: pthread_create failed\n");
+			set_exit(config);
+			wait_threads(i - 1, coders_threads);
 			free(coders_threads);
 			return (NULL);
 		}

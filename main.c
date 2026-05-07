@@ -6,13 +6,13 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/23 16:33:54 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/03 12:45:09 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/07 23:53:22 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 
-static void	wait_threads(int nb_coders, pthread_t *coders)
+void	wait_threads(int nb_coders, pthread_t *coders)
 {
 	int	i;
 
