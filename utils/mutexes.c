@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/24 14:17:25 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/08 00:04:22 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/08 00:12:07 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int	destroy_free_everything(t_config *config, t_coder *coders,
 	free(config->config_mutex);
 	return (ret);
 }
+
 void	free_everything(t_data *data)
 {
 	if (data->coders)
