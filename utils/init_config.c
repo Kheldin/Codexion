@@ -6,7 +6,7 @@
 /*   By: kacherch <kacherch@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 09:25:37 by kacherch          #+#    #+#             */
-/*   Updated: 2026/05/08 00:07:29 by kacherch         ###   ########.fr       */
+/*   Updated: 2026/05/08 15:16:20 by kacherch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ static int	check_value(char **av, t_config *config)
 		while (av[i][j])
 		{
 			if (!ft_isdigit(av[i][j]))
+				return (-1);
+			if ((strlen(av[i]) == 10
+					&& strcmp("2147483647", av[i]) < 0) || (strlen(av[i]) > 10))
 				return (-1);
 			j++;
 		}
